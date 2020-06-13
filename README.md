@@ -50,7 +50,7 @@ $ npm run start:prod
 ## Usage
 
 ```bash
-The issue creator sits at localhost:3500. <br/>
+The issue creator sits at localhost:3500. 
 The log receiver is accessible at localhost:3500/log-receiver.
 ```
 
