@@ -1,6 +1,6 @@
 import { Injectable, Logger, Inject } from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
-import { LogType } from 'logging-format';
+import { LogType } from 'logging-format/src/log-type';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 /**
