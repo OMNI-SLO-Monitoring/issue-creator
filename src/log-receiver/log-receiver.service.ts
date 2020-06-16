@@ -21,6 +21,15 @@ export class LogReceiverService {
    */
   handleLogMessage(logMessage: LogMessageFormat) {
     this.logType = logMessage.type;
-    this.logger.log(logMessage);
+    this.logger.log(
+      'info',
+      JSON.stringify({
+        type: `${this.logType}`,
+        time: `${logMessage.time}`,
+        message: `${logMessage.message}`,
+        target: `${logMessage.target}`,
+        source: `${logMessage.source}`,
+      }),
+    );
   }
 }

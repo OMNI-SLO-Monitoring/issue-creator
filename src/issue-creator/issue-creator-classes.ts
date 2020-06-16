@@ -1,5 +1,5 @@
-import { LogMessageFormat } from 'src/LogMessageFormat';
-import { LogType } from 'src/LogType';
+import { LogMessageFormat } from 'logging-format';
+import { LogType } from 'logging-format/src/log-type';
 
 class IssueCreator {
   type: LogType;
@@ -9,17 +9,17 @@ class IssueCreator {
 }
 
 export class CpuIssueCreator extends IssueCreator {
-  type = LogType.Cpu;
+  type = LogType.CPU;
 }
 
 export class TimeoutIssueCreator extends IssueCreator {
-  type = LogType.Timeout;
+  type = LogType.TIMEOUT;
 }
 
 export class CbOpenIssueCreator extends IssueCreator {
-  type = LogType.CBOpen;
+  type = LogType.CB_OPEN;
 }
 
 export class ErrorResponseIssueCreator extends IssueCreator {
-  type = LogType.Error;
+  type = LogType.ERROR;
 }

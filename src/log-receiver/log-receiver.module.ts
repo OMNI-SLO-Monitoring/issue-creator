@@ -5,11 +5,11 @@ import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { format } from 'winston';
 
 @Module({
   imports: [
     WinstonModule.forRoot({
-      format: winston.format.json(),
       transports: [
         new winston.transports.File({
           filename: './static/received-logs.json',
