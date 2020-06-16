@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get } from '@nestjs/common';
 import { LogReceiverService } from './log-receiver.service';
-import { LogMessageFormat } from 'src/LogMessageFormat';
+import { LogMessageFormat } from 'logging-format';
 
 /**
  * This component receives the log messages from the monitors
@@ -15,5 +15,6 @@ export class LogReceiverController {
   @Post()
   receiveLog(@Body() logMessage: LogMessageFormat) {
     this.logRcvService.handleLogMessage(logMessage);
+    console.log('Received!');
   }
 }

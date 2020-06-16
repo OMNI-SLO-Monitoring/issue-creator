@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { LogMessageFormat } from 'src/LogMessageFormat';
-import { LogType } from 'src/LogType';
-import { WinstonLogger } from 'nest-winston';
+import { Injectable, Logger, Inject } from '@nestjs/common';
+import { LogMessageFormat } from 'logging-format';
+import { LogType } from 'logging-format/src/log-type';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 /**
  * This service handles the log message passed down from the controller
@@ -10,7 +10,7 @@ import { WinstonLogger } from 'nest-winston';
  */
 @Injectable()
 export class LogReceiverService {
-  constructor(private logger: WinstonLogger) {}
+  constructor(@Inject(WINSTON_MODULE_PROVIDER) private logger: Logger) {}
 
   //the type of the log message
   logType: LogType;
