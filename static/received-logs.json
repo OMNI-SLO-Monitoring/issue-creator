@@ -13,3 +13,19 @@
 {"level":"info"}
 {"adwasd":"asdasd","level":"info"}
 {"adwasd":"asdasd","adasdasd":"assd","adsdssasd":"asdsdd","level":"info"}
+{"level":"info","message":"{\"type\":\"Cpu\",\"time\":\"1592405947128\",\"message\":\"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated\",\"target\":\"null\",\"source\":\"http://localhost:3000/cpu/simulated\"}"}
+{"level":"info","message":"{\"type\":\"Cpu\",\"time\":\"1592405947130\",\"message\":\"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated\",\"target\":\"null\",\"source\":\"http://localhost:3000/cpu/simulated\"}"}
+{"level":"info","message":"{\"type\":\"Cpu\",\"time\":\"1592405948739\",\"message\":\"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated\",\"target\":\"null\",\"source\":\"http://localhost:3000/cpu/simulated\"}"}
+{"level":"info","message":"{\"type\":\"Cpu\",\"time\":\"1592405950739\",\"message\":\"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated\",\"target\":\"null\",\"source\":\"http://localhost:3000/cpu/simulated\"}"}
+{"level":"info","message":"{\"type\":\"Cpu\",\"time\":\"1592405952743\",\"message\":\"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated\",\"target\":\"null\",\"source\":\"http://localhost:3000/cpu/simulated\"}"}
+{"level":"info","message":"{\"type\":\"Cpu\",\"time\":\"1592405954740\",\"message\":\"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated\",\"target\":\"null\",\"source\":\"http://localhost:3000/cpu/simulated\"}"}
+INFO | {"type":"Cpu","time":"1592406766353","message":"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated","target":"null","source":"http://localhost:3000/cpu/simulated"}
+INFO | {"type":"Cpu","time":"1592406768225","message":"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated","target":"null","source":"http://localhost:3000/cpu/simulated"}
+{"type":"Cpu","time":"1592406799650","message":"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated","target":"null","source":"http://localhost:3000/cpu/simulated"}
+{"type":"Cpu","time":"1592406801534","message":"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated","target":"null","source":"http://localhost:3000/cpu/simulated"}
+{"type":"Cpu","time":"1592406803534","message":"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated","target":"null","source":"http://localhost:3000/cpu/simulated"}
+function split() { [native code] }
+function split() { [native code] }
+{"type":"Cpu","time":"1592407005652","message":"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated","target":"null","source":"http://localhost:3000/cpu/simulated"}
+{"type":"Cpu","time":"1592407007537","message":"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated","target":"null","source":"http://localhost:3000/cpu/simulated"}
+{"type":"Cpu","time":"1592407009539","message":"Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated","target":"null","source":"http://localhost:3000/cpu/simulated"}

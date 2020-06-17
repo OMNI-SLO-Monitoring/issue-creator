@@ -10,6 +10,10 @@ import { format } from 'winston';
 @Module({
   imports: [
     WinstonModule.forRoot({
+      format: winston.format.printf(info => {
+        let logMsg = `${info.message}`;
+        return logMsg;
+      }),
       transports: [
         new winston.transports.File({
           filename: './static/received-logs.json',
