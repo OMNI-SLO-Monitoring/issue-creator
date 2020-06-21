@@ -76,3 +76,71 @@ type: Cpu | time: 1592407843519 | source: http://localhost:3000/cpu/simulated | 
 type: Cpu | time: 1592407845519 | source: http://localhost:3000/cpu/simulated | target: null | message: Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated
 type: Cpu | time: 1592407847521 | source: http://localhost:3000/cpu/simulated | target: null | message: Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated
 type: Cpu | time: 1592407849522 | source: http://localhost:3000/cpu/simulated | target: null | message: Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated
+type: Cpu | time: 1592420974184 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420976095 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420978099 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420980103 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420982104 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420984109 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420986111 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420988112 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420990117 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420992117 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420994121 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420996123 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592420998128 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421000133 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421002137 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421004138 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421006144 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421008145 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421010151 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421012156 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421014159 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421016162 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421018165 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421020170 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421022173 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421024177 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421026178 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421028178 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421030180 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421032183 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421034185 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421036189 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421038192 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421040195 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421042199 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421044199 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421046203 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421048210 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421050211 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421052216 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421054217 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421056230 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421058226 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421060228 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421062234 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421064239 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421066238 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421068243 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421070246 | source: http://localhost:3000/cpu | target: null | message: Endpoint http://localhost:3000/cpu cannot be reached
+type: Cpu | time: 1592421176535 | source: http://localhost:3000/cpu | target: null | message: Cirtical CPU Load: 52 at http://localhost:3000/cpu
+type: Cpu | time: 1592421282679 | source: http://localhost:3000/cpu | target: null | message: Cirtical CPU Load: 57 at http://localhost:3000/cpu
+type: Cpu | time: 1592421294701 | source: http://localhost:3000/cpu | target: null | message: Cirtical CPU Load: 61 at http://localhost:3000/cpu
+type: Cpu | time: 1592421334869 | source: http://localhost:3000/cpu/simulated | target: null | message: Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated
+type: Cpu | time: 1592421335873 | source: http://localhost:3000/cpu/simulated | target: null | message: Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated
+type: Cpu | time: 1592421336876 | source: http://localhost:3000/cpu/simulated | target: null | message: Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated
+type: Cpu | time: 1592421337879 | source: http://localhost:3000/cpu/simulated | target: null | message: Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated
+type: Cpu | time: 1592421338885 | source: http://localhost:3000/cpu/simulated | target: null | message: Cirtical CPU Load: 60 at http://localhost:3000/cpu/simulated
+type: Cpu | time: 23 | source: asd | target: asdd | message: asda
+type: Cpu | time: 23 | source: asd | target: asdd | message: asda
+type: Cpu | time: 23 | source: asd | target: asdd | message: asda
+type: Cpu | time: 23 | source: asd | target: asdd | message: asda
+type: Cpu | time: 23 | source: asd | target: asdd | message: asda
+type: Cpu | time: 23 | source: asd | target: asdd | message: asda
+type: Cpu | time: 23 | source: asd | target: asdd | message: asda
+type: Cpu | time: 23 | source: asd | target: asdd | message: asda
+type: Cpu | time: 23 | source: asd | target: asdd | message: asda
+type: Cpu | time: 23 | source: asd | target: asdd | message: asda
+type: Cpu | time: 23 | source: asd | target: asdd | message: asda
