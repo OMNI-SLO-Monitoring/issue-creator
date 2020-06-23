@@ -2,7 +2,10 @@ import { Injectable, Logger, Inject, HttpService } from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { CpuUtilizationIssueCreatorComponent, TimeoutIssueCreatorComponent, CbOpenIssueCreatorComponent, ErrorResponseIssueCreatorComponent } from 'src/issue-creator/issue-creator-classes';
+import { CpuUtilizationIssueCreatorComponent } from 'src/issue-creator/cpu-issue-creator';
+import { TimeoutIssueCreatorComponent } from 'src/issue-creator/timeout-issue-creator';
+import { CbOpenIssueCreatorComponent } from 'src/issue-creator/cp-open-issue-creator';
+import { ErrorResponseIssueCreatorComponent } from 'src/issue-creator/error-response-issue-ceator';
 
 /**
  * This service handles the log message passed down from the controller
@@ -12,6 +15,7 @@ import { CpuUtilizationIssueCreatorComponent, TimeoutIssueCreatorComponent, CbOp
 @Injectable()
 export class LogReceiverService {
 
+  // Issue Creator for the Log Types
   cpuUtilizationIssueCreator: CpuUtilizationIssueCreatorComponent;
   timeoutIssueCreator: TimeoutIssueCreatorComponent;
   cbOpenIssueCreator: CbOpenIssueCreatorComponent;
@@ -21,6 +25,7 @@ export class LogReceiverService {
     @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
     private http: HttpService
   ) {
+    // Create an Issue Creator for each LogType
     this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(http);
     this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(http);
     this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(http);
@@ -37,12 +42,14 @@ export class LogReceiverService {
   }
 
   /**
-   * Log messages are handled here
+   * Handling of Log messages
    * @param logMessage is the log received by the log receiver controller
-   * and passed down here to be handled
+   * This calls the handleLog of the corresponding IssueCreator and passed the log message
    */
   handleLogMessage(logMessage: LogMessageFormat) {
+    // logging with winstaond
     this.logger.warn(`type: ${logMessage.type} | time: ${logMessage.time} | source: ${logMessage.source} | target: ${logMessage.target} | message: ${logMessage.message}`);
+
     switch (logMessage.type) {
       case LogType.CPU:
         this.cpuUtilizationIssueCreator.handleLog(logMessage);
