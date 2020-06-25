@@ -30,16 +30,6 @@ export class LogReceiverService {
     this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(http);
     this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(http);
     this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(http);
-
-    const testLog: LogMessageFormat = {
-      source: "asd",
-      detector: "asdd",
-      time: 23,
-      type: LogType.CPU,
-      message: "asda",
-      data: null
-    };
-    this.handleLogMessage(testLog);
   }
 
   /**
