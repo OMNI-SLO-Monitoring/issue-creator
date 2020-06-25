@@ -2,10 +2,10 @@ import { Injectable, Logger, Inject, HttpService } from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { CpuUtilizationIssueCreatorComponent } from 'src/issue-creator/cpu-issue-creator';
-import { TimeoutIssueCreatorComponent } from 'src/issue-creator/timeout-issue-creator';
-import { CbOpenIssueCreatorComponent } from 'src/issue-creator/cp-open-issue-creator';
-import { ErrorResponseIssueCreatorComponent } from 'src/issue-creator/error-response-issue-ceator';
+import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
+import { TimeoutIssueCreatorComponent } from '../issue-creator/timeout-issue-creator';
+import { CbOpenIssueCreatorComponent } from '../issue-creator/cp-open-issue-creator';
+import { ErrorResponseIssueCreatorComponent } from '../issue-creator/error-response-issue-ceator';
 
 /**
  * This service handles the log message passed down from the controller
@@ -31,12 +31,13 @@ export class LogReceiverService {
     this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(http);
     this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(http);
 
-    const testLog = {
+    const testLog: LogMessageFormat = {
       source: "asd",
-      target: "asdd",
+      detector: "asdd",
       time: 23,
       type: LogType.CPU,
-      message: "asda"
+      message: "asda",
+      data: null
     };
     this.handleLogMessage(testLog);
   }
@@ -48,7 +49,7 @@ export class LogReceiverService {
    */
   handleLogMessage(logMessage: LogMessageFormat) {
     // logging with winstaond
-    this.logger.warn(`type: ${logMessage.type} | time: ${logMessage.time} | source: ${logMessage.source} | target: ${logMessage.target} | message: ${logMessage.message}`);
+    this.logger.warn(`type: ${logMessage.type} | time: ${logMessage.time} | source: ${logMessage.source} | detector: ${logMessage.detector} | message: ${logMessage.message}`);
 
     switch (logMessage.type) {
       case LogType.CPU:

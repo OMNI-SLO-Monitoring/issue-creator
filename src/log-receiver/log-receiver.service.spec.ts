@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LogReceiverService } from './log-receiver.service';
-import { LogType } from 'logging-format';
+import { LogType, LogMessageFormat } from 'logging-format';
 
 describe('LogReceiverService', () => {
   let service: LogReceiverService;
@@ -19,12 +19,13 @@ describe('LogReceiverService', () => {
 
   it('should log "Handling Issue" and "Reporint  Issue"', () => {
 
-    const testLog = {
+    const testLog: LogMessageFormat = {
       source: "asd",
-      target: "asdd",
+      detector: "asdd",
       time: 23,
       type: LogType.CPU,
-      message: "asda"
+      message: "asda",
+      data: null
     };
 
     expect(service.handleLogMessage(testLog)).toBeDefined();

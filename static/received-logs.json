@@ -144,3 +144,5 @@ type: Cpu | time: 23 | source: asd | target: asdd | message: asda
 type: Cpu | time: 23 | source: asd | target: asdd | message: asda
 type: Cpu | time: 23 | source: asd | target: asdd | message: asda
 type: Cpu | time: 23 | source: asd | target: asdd | message: asda
+type: Cpu | time: 23 | source: asd | detector: asdd | message: asda
+type: Cpu | time: 23 | source: asd | detector: asdd | message: asda
