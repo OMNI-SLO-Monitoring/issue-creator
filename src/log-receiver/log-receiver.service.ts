@@ -6,6 +6,9 @@ import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-
 import { TimeoutIssueCreatorComponent } from '../issue-creator/timeout-issue-creator';
 import { CbOpenIssueCreatorComponent } from '../issue-creator/cp-open-issue-creator';
 import { ErrorResponseIssueCreatorComponent } from '../issue-creator/error-response-issue-ceator';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from "mongoose";
+import { Logs } from "src/schema/logs.schema";
 
 /**
  * This service handles the log message passed down from the controller
@@ -23,7 +26,8 @@ export class LogReceiverService {
 
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
-    private http: HttpService
+    private http: HttpService,
+    @InjectModel('logs') private logModel: Model<Logs>,
   ) {
     // Create an Issue Creator for each LogType
     this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(http);
@@ -57,5 +61,10 @@ export class LogReceiverService {
       default:
         throw "Not Implemented LogType"
     }
+  }
+
+  async addLogMessageToDatabase(logMessage: LogMessageFormat): Promise<Logs> {
+    const addedLog = new this.logModel(logMessage);
+    return addedLog.save();
   }
 }
