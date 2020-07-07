@@ -62,9 +62,19 @@ export class LogReceiverService {
         throw "Not Implemented LogType"
     }
   }
-
+  /**
+   * Writes the received log message into the database
+   * 
+   * @param logMessage Log sent by the monitor
+   */
   async addLogMessageToDatabase(logMessage: LogMessageFormat): Promise<Logs> {
     const addedLog = new this.logModel(logMessage);
     return addedLog.save();
+  }
+  /**
+   * Gets all logs from the database
+   */
+  async getAllLogs(): Promise<Logs[]> {
+    return this.logModel.find().exec();
   }
 }

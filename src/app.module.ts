@@ -7,7 +7,6 @@ import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [

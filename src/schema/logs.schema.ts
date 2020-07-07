@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { LogType } from 'logging-format';
 
 @Schema()
 export class Logs extends Document {
@@ -16,7 +17,7 @@ export class Logs extends Document {
   message: string;
 
   @Prop()
-  type: string;
+  type: LogType;
 
   @Prop()
   data: any;
