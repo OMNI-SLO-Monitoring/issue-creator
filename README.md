@@ -1,8 +1,8 @@
 ## issue-creator
 
 - Recieves logs (from logging [logging-module](https://github.com/ccims/logging-module)).
-- Handles logs different depending on type of log
-- Creates Issue and reports to API
+- Handles logs differentl depending on the type of log
+- Creates an Issue and reports to the API
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
