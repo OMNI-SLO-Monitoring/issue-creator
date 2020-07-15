@@ -46,31 +46,11 @@ $ docker-compose build
 $ docker-compose up
 ```
 
-## Installation without docker
-
-```bash
-$ npm install
-```
-There has to be a mongodb listening at db:27017.
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
 ## Usage
 
 ```bash
 The issue creator sits at localhost:3500. 
-If installed with docker the database is listening at localhost:27017.
+If installed with docker the database is available at localhost:27017.
 Post Request to localhost:3500 to add logs.
 Get Request to localhost:3500 to get all logs.
 ```
