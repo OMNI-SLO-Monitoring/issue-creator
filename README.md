@@ -70,7 +70,7 @@ $ npm run start:prod
 
 ```bash
 The issue creator sits at localhost:3500. 
-If installed with docker db listening at localhost:27017.
+If installed with docker the database is listening at localhost:27017.
 Post Request to localhost:3500 to add logs.
 Get Request to localhost:3500 to get all logs.
 ```
