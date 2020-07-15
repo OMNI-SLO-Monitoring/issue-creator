@@ -1,6 +1,7 @@
 ## issue-creator
 
 - Recieves logs (from logging [logging-module](https://github.com/ccims/logging-module)).
+
 - Handles logs different depending on type of log
 - Saves the logs to a mongodb
 - Creates Issue and reports to API
