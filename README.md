@@ -2,6 +2,7 @@
 
 - Recieves logs (from logging [logging-module](https://github.com/ccims/logging-module)).
 - Handles logs different depending on type of log
+- Saves the logs to a mongodb
 - Creates Issue and reports to API
 
 <p align="center">
@@ -34,11 +35,23 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+## Installation with docker compose
+
+```bash
+$ docker-compose build
+```
+## Running the app with docker
+
+```bash
+$ docker-compose up
+```
+
+## Installation without docker
 
 ```bash
 $ npm install
 ```
+There has to be a mongodb listening at db:27017.
 
 ## Running the app
 
@@ -57,6 +70,8 @@ $ npm run start:prod
 
 ```bash
 The issue creator sits at localhost:3500. 
-Send your logs to localhost:3500
+If installed with docker db listening at localhost:27017.
+Post Request to localhost:3500 to add logs.
+Get Request to localhost:3500 to get all logs.
 ```
 
