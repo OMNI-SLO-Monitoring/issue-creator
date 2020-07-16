@@ -16,6 +16,14 @@ export class LogReceiverController {
   @Header('Content-Type', 'application/json')
   receiveLog(@Body() logMessage: LogMessageFormat) {
     this.logRcvService.handleLogMessage(logMessage);
+    this.logRcvService.addLogMessageToDatabase(logMessage);
     console.log('Received!');
+  }
+  /**
+   * Returns all logs in the database
+   */
+  @Get()
+  getAllLogs() {
+    return this.logRcvService.getAllLogs();
   }
 }

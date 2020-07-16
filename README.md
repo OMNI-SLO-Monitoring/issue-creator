@@ -1,8 +1,10 @@
 ## issue-creator
 
 - Recieves logs (from logging [logging-module](https://github.com/ccims/logging-module)).
-- Handles logs differentl depending on the type of log
-- Creates an Issue and reports to the API
+
+- Handles logs different depending on type of log
+- Saves the logs to a mongodb
+- Creates Issue and reports to API
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
@@ -34,29 +36,23 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+## Installation with docker compose
 
 ```bash
-$ npm install
+$ docker-compose build
 ```
-
-## Running the app
+## Running the app with docker
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ docker-compose up
 ```
 
 ## Usage
 
 ```bash
 The issue creator sits at localhost:3500. 
-Send your logs to localhost:3500
+If installed with docker the database is available at localhost:27017.
+Post Request to localhost:3500 to add logs.
+Get Request to localhost:3500 to get all logs.
 ```
 

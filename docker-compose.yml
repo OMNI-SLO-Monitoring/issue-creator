@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    container_name: db
+
+  issue_creator:
+    depends_on:
+      - db
+    build:
+      context: .
+    ports: 
+      - "3500:3500"
+    container_name: issue_creator

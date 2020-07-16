@@ -1,4 +1,6 @@
 import { Module, HttpModule } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Logs, LogsSchema } from 'src/schema/logs.schema'
 import { LogReceiverController } from './log-receiver/log-receiver.controller';
 import { LogReceiverService } from './log-receiver/log-receiver.service';
 import { WinstonModule } from 'nest-winston';
@@ -23,7 +25,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'static'),
     }),
-    HttpModule
+    HttpModule,
+    MongooseModule.forRoot('mongodb://db:27017/logDatabase'),
+    MongooseModule.forFeature([{name: 'logs', schema: LogsSchema}]),
   ],
   controllers: [LogReceiverController],
   providers: [LogReceiverService],
