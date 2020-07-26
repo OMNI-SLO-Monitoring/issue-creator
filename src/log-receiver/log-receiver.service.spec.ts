@@ -17,15 +17,14 @@ describe('LogReceiverService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should log "Handling Issue" and "Reporint  Issue"', () => {
-
+  it('should log "Handling Issue" and "Reporting  Issue"', () => {
     const testLog: LogMessageFormat = {
-      source: "asd",
-      detector: "asdd",
+      source: 'asd',
+      detector: 'asdd',
       time: 23,
       type: LogType.CPU,
-      message: "asda",
-      data: null
+      message: 'asda',
+      data: null,
     };
 
     expect(service.handleLogMessage(testLog)).toBeDefined();
