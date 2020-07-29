@@ -18,24 +18,37 @@ export abstract class IssueReporter {
    * form of IssueFormat.
    */
   // TODO: Create Issue Format (Interface)
-  reportIssue(issue: IssueFormat) {
+  async reportIssue(issue: IssueFormat) {
+    // TODO: Where/What to send to API 
     //In GraphQL notation, the issue to be sent
     //In this case "null" is a placeholder for the real values.
-    const queryIssue = `{
-      title: null;
-      body: null;
-      componentIDs: null;
-      category: null;
-      labels: null;
-      assignees: null;
-      locations: null;
-      startDate: null;
-      dueDate: null;
-      estimatedTime: null;
-      clientMutationID: null;
-    }`;
-    console.log('Reporting Issue');
-    // TODO: Where/What to send to API
-    this.client.request(queryIssue).then(data => console.log(data));
+    
+    const inputData = { input : issue }
+    const queryIssue = `
+    mutation createIssue($input: CreateIssueInput!) {
+      createIssue(input: $input) {
+        issue {
+          id
+          title
+          body
+          createdAt
+          category
+          startDate
+          dueDate
+          estimatedTime
+        }
+      }
+    }
+    `
+
+    // this.client.request(queryIssue, inputData).then(data => console.log(data));
+    
+    try {
+        const data = await request(this.api, queryIssue, inputData)
+        console.log(JSON.stringify(data, undefined, 2))
+      } catch (error) {
+        console.error(JSON.stringify(error, undefined, 2))
+        console.log('ERROR');
+      }
   }
 }

@@ -15,10 +15,18 @@ export class CpuUtilizationIssueCreatorComponent extends IssueReporter
   public handleLog(log: LogMessageFormat) {
     if (log.type != LogType.CPU) throw 'Wrong LogType';
 
-    // TODO: Handle Issue Accordingly
-    this.reportIssue({
-      type: 'CPU',
-      cpuLoad: 23, // TODO: extract from logMessageFormat
-    });
+    let issue: IssueFormat = {
+      title: `${log.type}`,
+      body: `${log.message}`,
+      category: 'BUG',
+      componentIDs: [`${log.detector}`, `${log.source}`],
+      labels: ['ID'],
+      assignees: ['ID'],
+      locations: ['ID'],
+      startDate: log.time,
+      clientMutationID: 'id1234',
+  }
+  
+    this.reportIssue(issue);
   }
 }

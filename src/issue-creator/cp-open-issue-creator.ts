@@ -15,8 +15,18 @@ export class CbOpenIssueCreatorComponent extends IssueReporter
   handleLog(log: LogMessageFormat) {
     if (log.type != LogType.CB_OPEN) throw 'Wrong LogType';
 
-    // TODO: Handle Issue Accordingly
-    console.log('Handling Issue');
-    this.reportIssue({});
+    let issue: IssueFormat = {
+      title: `${log.type}`,
+      body: `${log.message}`,
+      category: 'BUG',
+      componentIDs: [`${log.source}`, `${log.detector}`],
+      labels: ['ID'],
+      assignees: ['ID'],
+      locations: ['ID'],
+      startDate: log.time,
+      clientMutationID: 'id1234',
+  }
+
+    this.reportIssue(issue);
   }
 }
