@@ -5,10 +5,10 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
 import { TimeoutIssueCreatorComponent } from '../issue-creator/timeout-issue-creator';
 import { CbOpenIssueCreatorComponent } from '../issue-creator/cp-open-issue-creator';
-import { ErrorResponseIssueCreatorComponent } from '../issue-creator/error-response-issue-ceator';
+import { ErrorResponseIssueCreatorComponent } from '../issue-creator/error-response-issue-creator';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from "mongoose";
-import { Logs } from "src/schema/logs.schema";
+import { Model } from 'mongoose';
+import { Logs } from 'src/schema/logs.schema';
 
 /**
  * This service handles the log message passed down from the controller
@@ -17,7 +17,6 @@ import { Logs } from "src/schema/logs.schema";
  */
 @Injectable()
 export class LogReceiverService {
-
   // Issue Creator for the Log Types
   cpuUtilizationIssueCreator: CpuUtilizationIssueCreatorComponent;
   timeoutIssueCreator: TimeoutIssueCreatorComponent;
@@ -25,26 +24,27 @@ export class LogReceiverService {
   errorResponseIssueCreator: ErrorResponseIssueCreatorComponent;
 
   constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
     private http: HttpService,
     @InjectModel('logs') private logModel: Model<Logs>,
   ) {
     // Create an Issue Creator for each LogType
-    this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(http);
+    this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(
+      http,
+    );
     this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(http);
     this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(http);
-    this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(http);
+    this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(
+      http,
+    );
   }
 
   /**
    * Handling of Log messages
+   *
    * @param logMessage is the log received by the log receiver controller
    * This calls the handleLog of the corresponding IssueCreator and passed the log message
    */
   handleLogMessage(logMessage: LogMessageFormat) {
-    // logging with winstaond
-    this.logger.warn(`type: ${logMessage.type} | time: ${logMessage.time} | source: ${logMessage.source} | detector: ${logMessage.detector} | message: ${logMessage.message}`);
-
     switch (logMessage.type) {
       case LogType.CPU:
         this.cpuUtilizationIssueCreator.handleLog(logMessage);
@@ -59,12 +59,12 @@ export class LogReceiverService {
         this.timeoutIssueCreator.handleLog(logMessage);
         break;
       default:
-        throw "Not Implemented LogType"
+        throw 'Not Implemented LogType';
     }
   }
   /**
    * Writes the received log message into the database
-   * 
+   *
    * @param logMessage Log sent by the monitor
    */
   async addLogMessageToDatabase(logMessage: LogMessageFormat): Promise<Logs> {
@@ -73,6 +73,8 @@ export class LogReceiverService {
   }
   /**
    * Gets all logs from the database
+   *
+   * @returns all logs from the database
    */
   async getAllLogs(): Promise<Logs[]> {
     return this.logModel.find().exec();
