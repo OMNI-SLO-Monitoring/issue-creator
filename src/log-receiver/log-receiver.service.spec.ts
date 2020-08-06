@@ -50,4 +50,6 @@ describe('LogReceiverService', () => {
     };
     expect(await service.addLogMessageToDatabase(logMock)).toBe(logMock);
   });
+
+  it('should return all logs successfully', () => {});
 });
