@@ -2,20 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LogReceiverService } from './log-receiver.service';
 import { HttpModule } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
-import { WinstonLogger } from 'nest-winston';
 import { LogMessageFormat, LogType } from 'logging-format';
+import { dbMock } from '../db-mock-data/database-mock';
 
 describe('LogReceiverService', () => {
   let service: LogReceiverService;
 
   beforeEach(async () => {
-    //database mock with save function
-    function dbMock(dto) {
-      this.data = dto;
-      this.save = () => {
-        return this.data;
-      };
-    }
     const module: TestingModule = await Test.createTestingModule({
       imports: [HttpModule],
       providers: [
@@ -35,7 +28,8 @@ describe('LogReceiverService', () => {
   });
 
   /**
-   * Function that probes if valid logs are added to database
+   * Test function that probes if valid logs are added to database and
+   * returned. In this case the test should be successful.
    */
   it('should add log message to database successfully', async () => {
     const logMock: LogMessageFormat = {
@@ -51,5 +45,15 @@ describe('LogReceiverService', () => {
     expect(await service.addLogMessageToDatabase(logMock)).toBe(logMock);
   });
 
-  it('should return all logs successfully', () => {});
+  /**
+   * Test function that probes whether all predefined logs from
+   * the mock database are returned correctly and fulfill the following
+   * checks
+   */
+  it('should return all logs successfully', async () => {
+    let fetchedLogs = await service.getAllLogs();
+    expect(fetchedLogs.length).toBe(2);
+    expect(fetchedLogs[0].type).toBe(LogType.TIMEOUT);
+    expect(fetchedLogs[1].type).toBe(LogType.CPU);
+  });
 });
