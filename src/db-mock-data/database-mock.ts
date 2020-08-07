@@ -4,8 +4,8 @@ import { LogType, LogMessageFormat } from 'logging-format';
  *the function logic
  */
 export class dbMock {
-  data;
-  constructor(dto: any) {
+  data: LogMessageFormat;
+  constructor(dto: LogMessageFormat) {
     this.data = dto;
   }
 
@@ -13,7 +13,7 @@ export class dbMock {
    * Mocks the save function of the Model by returning
    * the added log entry
    */
-  save = () => {
+  save = (): LogMessageFormat => {
     return this.data;
   };
 

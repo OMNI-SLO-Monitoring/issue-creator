@@ -48,12 +48,24 @@ describe('LogReceiverService', () => {
   /**
    * Test function that probes whether all predefined logs from
    * the mock database are returned correctly and fulfill the following
-   * checks
+   * checks. In this case the checks are successful.
    */
-  it('should return all logs successfully', async () => {
+  it('should return all logs and pass all checks', async () => {
     let fetchedLogs = await service.getAllLogs();
     expect(fetchedLogs.length).toBe(2);
     expect(fetchedLogs[0].type).toBe(LogType.TIMEOUT);
     expect(fetchedLogs[1].type).toBe(LogType.CPU);
+  });
+
+  /**
+   * Test function that probes whether all predefined logs from
+   * the mock database are returned correctly and fulfill the following
+   * checks. In this case the checks are not successful.
+   */
+  it('should return all logs and fail all checks', async () => {
+    let fetchedLogs = await service.getAllLogs();
+    expect(fetchedLogs.length == 1).toBeFalsy();
+    expect(fetchedLogs[0].type === LogType.ERROR).toBeFalsy();
+    expect(fetchedLogs[1].type === LogType.CB_OPEN).toBeFalsy();
   });
 });
