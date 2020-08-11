@@ -1,7 +1,6 @@
-import { Injectable, Logger, Inject, HttpService } from '@nestjs/common';
+import { Injectable, HttpService } from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
 import { TimeoutIssueCreatorComponent } from '../issue-creator/timeout-issue-creator';
 import { CbOpenIssueCreatorComponent } from '../issue-creator/cp-open-issue-creator';
@@ -25,7 +24,6 @@ export class LogReceiverService {
   errorResponseIssueCreator: ErrorResponseIssueCreatorComponent;
 
   constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
     private http: HttpService,
     @InjectModel('logs') private logModel: Model<Logs>,
   ) {
@@ -43,7 +41,7 @@ export class LogReceiverService {
    */
   handleLogMessage(logMessage: LogMessageFormat) {
     // logging with winstaond
-    this.logger.warn(`type: ${logMessage.type} | time: ${logMessage.time} | source: ${logMessage.source} | detector: ${logMessage.detector} | message: ${logMessage.message}`);
+   
 
     switch (logMessage.type) {
       case LogType.CPU:

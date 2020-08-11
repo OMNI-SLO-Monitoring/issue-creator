@@ -15,19 +15,21 @@ export class TimeoutIssueCreatorComponent extends IssueReporter
   handleLog(log: LogMessageFormat) {
     if (log.type != LogType.TIMEOUT) throw 'Wrong LogType';
 
-    
-    let issue: IssueFormat = {
-      title: `${log.type}`,
+
+    const issue: IssueFormat = {
+      title: `${log.type}` + 'error',
       body: `${log.message}`,
       category: 'BUG',
       componentIDs: [`${log.detector}`, `${log.source}`],
-      labels: ['ID'],
-      assignees: ['ID'],
-      locations: ['ID'],
+      labels: [`${log.detector}`],
+      assignees: [`${log.detector}`],
+      locations: [`${log.source}`],
       startDate: log.time,
       clientMutationID: 'id1234',
-  }
-    console.log(issue);
+    }
+    console.log('Hallo');
     this.reportIssue(issue);
   }
+  
+
 }

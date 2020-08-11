@@ -15,14 +15,14 @@ export class ErrorResponseIssueCreatorComponent extends IssueReporter
   handleLog(log: LogMessageFormat) {
     if (log.type != LogType.ERROR) throw 'Wrong LogType';
 
-    let issue: IssueFormat = {
+    const issue: IssueFormat = {
       title: `${log.type}`,
       body: `${log.message}`,
       category: 'BUG',
       componentIDs: [`${log.detector}`, `${log.source}`],
-      labels: ['ID'],
-      assignees: ['ID'],
-      locations: ['ID'],
+      labels: [`${log.detector}`],
+      assignees: [`${log.detector}`],
+      locations: [`${log.source}`],
       startDate: log.time,
       clientMutationID: 'id1234',
   }
