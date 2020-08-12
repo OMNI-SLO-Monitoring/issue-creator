@@ -26,7 +26,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       rootPath: join(__dirname, '..', 'static'),
     }),
     HttpModule,
-    MongooseModule.forRoot('mongodb://db:27017/logDatabase'),
+    MongooseModule.forRoot('mongodb://localhost:27017/logDatabase'),
     MongooseModule.forFeature([{name: 'logs', schema: LogsSchema}]),
   ],
   controllers: [LogReceiverController],
