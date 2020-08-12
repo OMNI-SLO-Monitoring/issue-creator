@@ -7,7 +7,7 @@ import { LogMessageFormat } from 'logging-format';
  */
 @Controller()
 export class LogReceiverController {
-  constructor(private logRcvService: LogReceiverService) {}
+  constructor(private logRcvService: LogReceiverService) { }
   /**
    * Logs are received here and handled accordingly
    * @param logMessage is the log that is sent by the monitors and received here
@@ -15,7 +15,6 @@ export class LogReceiverController {
   @Post()
   @Header('Content-Type', 'application/json')
   receiveLog(@Body() logMessage: LogMessageFormat) {
-    this.logRcvService.handleLogMessage(logMessage);
     this.logRcvService.addLogMessageToDatabase(logMessage);
     console.log('Received!');
   }

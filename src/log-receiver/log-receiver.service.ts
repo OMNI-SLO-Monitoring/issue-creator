@@ -22,7 +22,6 @@ export class LogReceiverService {
   timeoutIssueCreator: TimeoutIssueCreatorComponent;
   cbOpenIssueCreator: CbOpenIssueCreatorComponent;
   errorResponseIssueCreator: ErrorResponseIssueCreatorComponent;
-
   constructor(
     private http: HttpService,
     @InjectModel('logs') private logModel: Model<Logs>,
@@ -39,34 +38,43 @@ export class LogReceiverService {
    * @param logMessage is the log received by the log receiver controller
    * This calls the handleLog of the corresponding IssueCreator and passed the log message
    */
-  handleLogMessage(logMessage: LogMessageFormat) {
-    // logging with winstaond
-   
-
+  async handleLogMessage(logMessage: LogMessageFormat) {
+    let issueID;
     switch (logMessage.type) {
       case LogType.CPU:
-        this.cpuUtilizationIssueCreator.handleLog(logMessage);
+        issueID = await this.cpuUtilizationIssueCreator.handleLog(logMessage);
         break;
       case LogType.CB_OPEN:
-        this.cbOpenIssueCreator.handleLog(logMessage);
+        issueID = await this.cbOpenIssueCreator.handleLog(logMessage);
         break;
       case LogType.ERROR:
-        this.errorResponseIssueCreator.handleLog(logMessage);
+        issueID = await this.errorResponseIssueCreator.handleLog(logMessage);
         break;
       case LogType.TIMEOUT:
-        this.timeoutIssueCreator.handleLog(logMessage);
+        issueID = await this.timeoutIssueCreator.handleLog(logMessage)
         break;
       default:
         throw "Not Implemented LogType"
     }
+    return issueID;
   }
   /**
-   * Writes the received log message into the database
+   * Writes the received log message into the database together with the issue ID
    * 
    * @param logMessage Log sent by the monitor
    */
   async addLogMessageToDatabase(logMessage: LogMessageFormat): Promise<Logs> {
-    const addedLog = new this.logModel(logMessage);
+    const issueID = await this.handleLogMessage(logMessage);
+    const log = {
+      time: logMessage.time,
+      source: logMessage.source,
+      detector: logMessage.detector,
+      message: logMessage.message,
+      type: logMessage.type,
+      data: logMessage.data,
+      issueID: issueID
+    }
+    const addedLog = new this.logModel(log);
     return addedLog.save();
   }
   /**

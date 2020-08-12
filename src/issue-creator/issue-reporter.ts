@@ -6,7 +6,7 @@ import { IssueFormat } from '../IssueFormat';
  * Provides the basic functionality every "detailed" IssueComponent should have
  */
 export abstract class IssueReporter {
-  api = 'http://localhost:8080/api'; // TODO: currently IP address
+  api = 'http://localhost:8080/api'; // TODO: currently you have to insert your own IP address with port 8080
 
   constructor(private http: HttpService) { }
 
@@ -15,12 +15,7 @@ export abstract class IssueReporter {
    * Can be called in every Component that extends IssueComponent. It has the
    * form of IssueFormat.
    */
-  // TODO: Create Issue Format (Interface)
-  async reportIssue(issue: IssueFormat){
-    // TODO: Where/What to send to API 
-    //In GraphQL notation, the issue to be sent
-    //In this case "null" is a placeholder for the real values.
-
+  async reportIssue(issue: IssueFormat) {
     const inputData = { input: issue }
     const queryIssue = gql`
     mutation createIssue($input: CreateIssueInput!) {
@@ -30,18 +25,18 @@ export abstract class IssueReporter {
         }
       }
     }
-
     `
-    console.log(queryIssue);
-
     try {
       const data = await request(`${this.api}`, queryIssue, inputData)
       console.log(JSON.stringify(data, undefined, 2))
+      const issueID = data.createIssue.issue.id;
+      return issueID;
     } catch (error) {
       console.error(JSON.stringify(error, undefined, 2))
-      console.log('There was an error', error);
+      console.log(error);
     }
   }
-  
+
+
 
 }
