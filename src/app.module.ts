@@ -7,8 +7,8 @@ import { LogReceiverService } from './log-receiver/log-receiver.service';
 @Module({
   imports: [
     HttpModule,
-    MongooseModule.forRoot('mongodb://db:27017/logDatabase'),
-    MongooseModule.forFeature([{ name: 'logs', schema: LogsSchema }]),
+    MongooseModule.forRoot('mongodb://localhost:27017/logDatabase'),
+    MongooseModule.forFeature([{name: 'logs', schema: LogsSchema}]),
   ],
   controllers: [LogReceiverController],
   providers: [LogReceiverService],

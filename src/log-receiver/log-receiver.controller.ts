@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Header } from '@nestjs/common';
+import { Controller, Post, Body, Get, Header, Param } from '@nestjs/common';
 import { LogReceiverService } from './log-receiver.service';
 import { LogMessageFormat } from 'logging-format';
 
@@ -25,5 +25,13 @@ export class LogReceiverController {
   @Get()
   getAllLogs() {
     return this.logRcvService.getAllLogs();
+  }
+
+  /**
+   * Returns all logs from one specific service identified by id
+   */
+  @Get('/:id')
+  getLogsByServiceId(@Param('id') id : string) {
+    return this.logRcvService.getLogsByServiceId(id);
   }
 }

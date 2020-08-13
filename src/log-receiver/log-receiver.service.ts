@@ -79,4 +79,12 @@ export class LogReceiverService {
   async getAllLogs(): Promise<Logs[]> {
     return this.logModel.find().exec();
   }
+  /**
+   * Gets all logs from a certain service from the database
+   * 
+   * @param id id of the service that reported a log
+   */
+  async getLogsByServiceId(id : any) {
+    return this.logModel.find({"serviceId": id}).exec();
+  }
 }
