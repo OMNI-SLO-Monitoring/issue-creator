@@ -37,12 +37,12 @@ describe('LogReceiverService', () => {
       time: Date.now(),
       source: 'Database Service',
       detector: 'Price Service',
-      message: 'There was an Error',
+      message: 'Error',
       data: {
         failedResponses: 31,
         openTime: 10,
       },
-      issueID: 'Issue_1'
+      issueID: 'Issue_2'
     };
     expect(await service.addLogMessageToDatabase(logMock)).toStrictEqual(logMock);
   });

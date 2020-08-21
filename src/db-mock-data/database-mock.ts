@@ -5,7 +5,7 @@ import { LogType, LogMessageFormat } from 'logging-format';
  * entries of the mock database
  */
 const execObj = {
-  exec: (): LogMessageFormat[] => {
+  exec: (): any[] => {
     return [
       {
         type: LogType.TIMEOUT,
@@ -16,6 +16,7 @@ const execObj = {
         data: {
           timeoutDuration: 31,
         },
+        issueID: 'Issue_1'
       },
       {
         type: LogType.CPU,
@@ -26,6 +27,7 @@ const execObj = {
         data: {
           cpuUtilization: 99,
         },
+        issueID: 'Issue_1'
       },
     ];
   },
