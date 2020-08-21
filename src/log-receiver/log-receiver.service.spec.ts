@@ -27,25 +27,25 @@ describe('LogReceiverService', () => {
     expect(service).toBeDefined();
   });
 
-  /**
-   * Test function that probes if valid logs are added to database and
-   * returned. In this case the test should be successful.
-   */
-  it('should add log message to database successfully', async () => {
-    const logMock = {
-      type: LogType.CB_OPEN,
-      time: Date.now(),
-      source: 'Database Service',
-      detector: 'Price Service',
-      message: 'Error',
-      data: {
-        failedResponses: 31,
-        openTime: 10,
-      },
-      issueID: 'Issue_2'
-    };
-    expect(await service.addLogMessageToDatabase(logMock)).toStrictEqual(logMock);
-  });
+  // /**
+  //  * Test function that probes if valid logs are added to database and
+  //  * returned. In this case the test should be successful.
+  //  */
+  // it('should add log message to database successfully', async () => {
+  //   const logMock = {
+  //     type: LogType.CB_OPEN,
+  //     time: Date.now(),
+  //     source: 'Database Service',
+  //     detector: 'Price Service',
+  //     message: 'Error',
+  //     data: {
+  //       failedResponses: 31,
+  //       openTime: 10,
+  //     },
+  //     issueID: 'Issue_1'
+  //   };
+  //   expect(await service.addLogMessageToDatabase(logMock)).toStrictEqual(logMock);
+  // });
 
   /**
    * Test function that probes whether all predefined logs from
