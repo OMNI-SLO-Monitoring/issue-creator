@@ -4,7 +4,9 @@ import { IssueCreatorComponent } from './issue-creator.interface';
 import { IssueReporter } from './issue-reporter';
 import { IssueFormat } from '../IssueFormat';
 
-//  CpuUtilizationIssueComponent handles CpuUtilization Logs, it extends IssueComponent to enable individual issue creation for cpu issues
+/**
+ * CpuUtilizationIssueComponent handles CpuUtilization Logs, it extends IssueComponent to enable individual issue creation for cpu issues
+ */
 export class CpuUtilizationIssueCreatorComponent extends IssueReporter
   implements IssueCreatorComponent {
   id: string;
@@ -12,7 +14,11 @@ export class CpuUtilizationIssueCreatorComponent extends IssueReporter
     super(http);
   }
 
-  //  handles Cpu logs, no specific information on how to handle cpu issues yet
+  /**
+     * handles Cpu logs, no specific information on how to handle cpu issues yet
+     * @param log received log in the LogMessageFormat
+     * @returns the issue ID received from the Back end
+     */
   async handleLog(log: LogMessageFormat) {
     if (log.type != LogType.CPU) throw 'Wrong LogType';
 

@@ -36,7 +36,9 @@ export class LogReceiverService {
   /**
    * Handling of Log messages
    * @param logMessage is the log received by the log receiver controller
+   * @returns issueID that was received from the backend
    * This calls the handleLog of the corresponding IssueCreator and passed the log message
+   * 
    */
   async handleLogMessage(logMessage: LogMessageFormat) {
     let issueID;

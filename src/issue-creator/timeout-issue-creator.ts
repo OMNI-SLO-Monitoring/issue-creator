@@ -3,8 +3,9 @@ import { IssueCreatorComponent } from './issue-creator.interface';
 import { HttpService } from '@nestjs/common';
 import { LogMessageFormat, LogType } from 'logging-format';
 import { IssueFormat } from '../IssueFormat';
-
-//  TimeoutIssueComponent handles Timeout Logs, it extends IssueComponent to enable individual issue creation for timeout issues
+/**
+ * TimeoutIssueComponent handles Timeout Logs, it extends IssueComponent to enable individual issue creation for timeout issues
+ */
 export class TimeoutIssueCreatorComponent extends IssueReporter
   implements IssueCreatorComponent {
   id: string;
@@ -12,7 +13,11 @@ export class TimeoutIssueCreatorComponent extends IssueReporter
     super(http);
   }
 
-  //  handles timeout logs, no specific information on how to handle cpu issues yet
+  /**
+   * handles timeout logs, no specific information on how to handle cpu issues yet
+   * @param log received log in the LogMessageFormat
+   * @returns the issue ID received from the Back end
+   */
   async handleLog(log: LogMessageFormat) {
     if (log.type != LogType.TIMEOUT) throw 'Wrong LogType';
 

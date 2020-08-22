@@ -2,15 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LogReceiverService } from './log-receiver.service';
 import { HttpModule } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
-import { LogType, LogMessageFormat } from 'logging-format';
+import { LogType} from 'logging-format';
 import { DbMock } from '../db-mock-data/database-mock';
-import { IssueReporter } from '../issue-creator/issue-reporter';
-import { CbOpenIssueCreatorComponent } from '../issue-creator/cb-open-issue-creator';
 
 describe('LogReceiverService', () => {
   let service: LogReceiverService;
-  let issueReporter: IssueReporter;
-  let cbOpenIssueCreator: CbOpenIssueCreatorComponent;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -36,17 +32,6 @@ describe('LogReceiverService', () => {
    * returned. In this case the test should be successful.
    */
   it('should add log message to database successfully', async () => {
-    const logMessage:LogMessageFormat = {
-      type: LogType.CB_OPEN,
-      time: Date.now(),
-      source: 'Database Service',
-      detector: 'Price Service',
-      message: 'Error',
-      data: {
-        failedResponses: 31,
-        openTime: 10,
-      },
-    };
     const logMock = {
       type: LogType.CB_OPEN,
       time: Date.now(),
@@ -59,7 +44,6 @@ describe('LogReceiverService', () => {
       },
       issueID: 'Issue_1'
     };
-    jest.spyOn(service.cbOpenIssueCreator, "reportIssue").mockResolvedValue(() => "Issue_1");
     jest.spyOn(service.cbOpenIssueCreator, "handleLog").mockImplementation(() => Promise.resolve("Issue_1"));
     expect(await service.addLogMessageToDatabase(logMock)).toStrictEqual(logMock);
   });
