@@ -3,11 +3,11 @@ import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
 import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
 import { TimeoutIssueCreatorComponent } from '../issue-creator/timeout-issue-creator';
-import { CbOpenIssueCreatorComponent } from '../issue-creator/cp-open-issue-creator';
+import { CbOpenIssueCreatorComponent } from '../issue-creator/cb-open-issue-creator';
 import { ErrorResponseIssueCreatorComponent } from '../issue-creator/error-response-issue-creator';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Logs } from 'src/schema/logs.schema';
+import { Logs } from '../schema/logs.schema';
 
 /**
  * This service handles the log message passed down from the controller
