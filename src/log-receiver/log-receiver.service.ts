@@ -94,8 +94,10 @@ export class LogReceiverService implements OnModuleInit {
     return this.logModel.find({"serviceId": id}).exec();
   }
   /**
-   * Connecting to kafka instance and waiting for incoming logs
-   * when a log comes in it is saved to the database
+   * Connecting to kafka instance and begin consuming
+   * incoming messages are saved to the collection logs in the mongodb
+   * 
+   * Consumer is subscribed to the logs topic at the kafka instance
    */
   async startConsuming() {
     await consumer.connect();
