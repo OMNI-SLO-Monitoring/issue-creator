@@ -46,6 +46,10 @@ $ docker-compose build
 ```bash
 $ docker-compose up
 ```
+#### Start the database only:
+```bash
+$ docker run -d -p 27017:27017 mongo
+```
 
 ## Usage
 
