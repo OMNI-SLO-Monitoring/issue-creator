@@ -8,6 +8,8 @@ import { ErrorResponseIssueCreatorComponent } from '../issue-creator/error-respo
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Logs } from '../schema/logs.schema';
+import { ConfigService } from '@nestjs/config';
+
 
 /**
  * This service handles the log message passed down from the controller
@@ -22,19 +24,22 @@ export class LogReceiverService {
   timeoutIssueCreator: TimeoutIssueCreatorComponent;
   cbOpenIssueCreator: CbOpenIssueCreatorComponent;
   errorResponseIssueCreator: ErrorResponseIssueCreatorComponent;
+  
   constructor(
     private http: HttpService,
+    private configService: ConfigService,
     @InjectModel('logs') private logModel: Model<Logs>,
   ) {
     // Create an Issue Creator for each LogType
-    this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(http);
-    this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(http);
-    this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(http);
-    this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(http);
+    this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(http, configService);
+    this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(http, configService);
+    this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(http, configService);
+    this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(http, configService);
   }
 
   /**
-   * Handling of Log messages
+   * Handles Log messages by delegating them to the respective IssueCreator
+   * 
    * @param logMessage is the log received by the log receiver controller
    * @returns issueID that was received from the backend
    * This calls the handleLog of the corresponding IssueCreator and passed the log message
@@ -61,9 +66,10 @@ export class LogReceiverService {
     return issueID;
   }
   /**
-   * Writes the received log message into the database together with the issue ID
+   * Writes the received log message and the issue ID into the database 
    * 
    * @param logMessage Log sent by the monitor
+   * @returns the saved log
    */
   async addLogMessageToDatabase(logMessage: LogMessageFormat): Promise<Logs> {
     const issueID = await this.handleLogMessage(logMessage);
@@ -81,6 +87,8 @@ export class LogReceiverService {
   }
   /**
    * Gets all logs from the database
+   * 
+   * @returns all logs from the database
    */
   async getAllLogs(): Promise<Logs[]> {
     return this.logModel.find().exec();
@@ -93,7 +101,7 @@ export class LogReceiverService {
    * 
    * @param id id of the service that reported a log
    */
-  async getLogsByServiceId(id : any) {
-    return this.logModel.find({"serviceId": id}).exec();
+  async getLogsByServiceId(id: any) {
+    return this.logModel.find({ "serviceId": id }).exec();
   }
 }

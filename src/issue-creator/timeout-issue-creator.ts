@@ -1,40 +1,27 @@
-import { IssueReporter } from './issue-reporter';
-import { IssueCreatorComponent } from './issue-creator.interface';
 import { HttpService } from '@nestjs/common';
 import { LogMessageFormat, LogType } from 'logging-format';
-import { IssueFormat } from '../IssueFormat';
+import { IssueCreator } from './issue-creator'
+import { ConfigService } from '@nestjs/config';
+
 /**
- * TimeoutIssueComponent handles Timeout Logs, it extends IssueComponent to enable individual issue creation for timeout issues
+ * TimeoutIssueComponent handles Timeout Logs, it extends IssueCreator to enable individual issue creation for timeout issues
  */
-export class TimeoutIssueCreatorComponent extends IssueReporter
-  implements IssueCreatorComponent {
-  id: string;
-  constructor(http: HttpService) {
-    super(http);
+export class TimeoutIssueCreatorComponent extends IssueCreator {
+  issueCreator: IssueCreator;
+  constructor(http: HttpService, configService: ConfigService) {
+    super(http, configService);
+    this.issueCreator = new IssueCreator(http, configService);
   }
 
   /**
-   * handles timeout logs, no specific information on how to handle cpu issues yet
+   * handles timeout logs by creating an Issue and sending it to the API: https://github.com/ccims/ccims-backend/tree/apiMockup
+   *
    * @param log received log in the LogMessageFormat
-   * @returns the issue ID received from the Back end
+   * @returns the issue ID received from the backend
    */
   async handleLog(log: LogMessageFormat) {
     if (log.type != LogType.TIMEOUT) throw 'Wrong LogType';
-
-    const issue: IssueFormat = {
-      title: `${log.type}` ,
-      body: `${log.data}`,
-      category: 'BUG',
-      componentIDs: [`${log.detector}`, `${log.source}`],
-      labels: [`${log.detector}`],
-      assignees: [`${log.detector}`],
-      locations: [`${log.source}`],
-      startDate: log.time,
-      clientMutationID: 'id1234',
-    }
-    this.id = await this.reportIssue(issue);
-    return this.id;
-
+    return this.issueCreator.createIssueFromLog(log);
   }
 
 }

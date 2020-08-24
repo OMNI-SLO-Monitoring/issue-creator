@@ -50,7 +50,10 @@ $ docker-compose up
 ```bash
 $ docker run -d -p 27017:27017 mongo
 ```
-
+#### If the database is running:
+```bash 
+$ npm run start
+```
 ## Usage
 
 ```bash

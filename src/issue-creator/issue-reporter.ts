@@ -1,18 +1,21 @@
 import { HttpService } from '@nestjs/common';
 import { request, gql } from 'graphql-request'
 import { IssueFormat } from '../IssueFormat';
+import { ConfigService } from '@nestjs/config';
 
 /**
  * Provides the basic functionality every "detailed" IssueComponent should have
  */
 export abstract class IssueReporter {
-  api = 'http://localhost:8080/api'; 
+  api = this.configService.get<string>('BACKEND_API')
 
-  constructor(private http: HttpService) { }
+  constructor(private readonly http: HttpService, private readonly configService: ConfigService) { }
 
   /**
-   * Takes an @param issue and sends Issues to the current MockApi and receives the Issue ID
-   * Can be called in every Component that extends IssueComponent.
+   * sends Issues to the current MockApi (https://github.com/ccims/ccims-backend/tree/apiMockup) 
+   * and receives the Issue ID from it if the request was successful.
+   * 
+   * @param issue issue to be send
    * @returns the issueID received when the the request was accepted by the server
    */
   async reportIssue(issue: IssueFormat) {
@@ -36,7 +39,4 @@ export abstract class IssueReporter {
       console.log(error);
     }
   }
-
-
-
 }

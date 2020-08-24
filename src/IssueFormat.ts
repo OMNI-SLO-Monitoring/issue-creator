@@ -1,6 +1,6 @@
 /**
- * This is the issue format as defined by the backend developers and
- * messages of this type are sent to Sandro's API.
+ * This is the issue format as defined here: https://github.com/ccims/ccims-backend/blob/apiMockup/schemas/schema.graphql
+ *  and messages of this type are sent to Sandro's API: https://github.com/ccims/ccims-backend/tree/apiMockup.
  */
 export interface IssueFormat {
   title: string;
