@@ -4,13 +4,14 @@ import { HttpModule } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { LogType} from 'logging-format';
 import { DbMock } from '../db-mock-data/database-mock';
+import { ConfigService, ConfigModule } from '@nestjs/config';
 
 describe('LogReceiverService', () => {
   let service: LogReceiverService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [HttpModule],
+      imports: [HttpModule, ConfigModule],
       providers: [
         LogReceiverService,
         {
