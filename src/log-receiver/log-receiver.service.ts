@@ -1,4 +1,4 @@
-import { Injectable, Logger, Inject, HttpService, OnModuleInit } from '@nestjs/common';
+import { Injectable, HttpService } from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
 import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
@@ -6,10 +6,10 @@ import { TimeoutIssueCreatorComponent } from '../issue-creator/timeout-issue-cre
 import { CbOpenIssueCreatorComponent } from '../issue-creator/cb-open-issue-creator';
 import { ErrorResponseIssueCreatorComponent } from '../issue-creator/error-response-issue-creator';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from "mongoose";
-import { Logs } from "src/schema/logs.schema";
+import { Model } from 'mongoose';
+import { Logs } from '../schema/logs.schema';
 import { ConfigService } from '@nestjs/config';
-import { Kafka } from "kafkajs";
+
 
 /**
  * This service handles the log message passed down from the controller
@@ -17,39 +17,24 @@ import { Kafka } from "kafkajs";
  * to the issue assigner service
  */
 @Injectable()
-export class LogReceiverService implements OnModuleInit {
+export class LogReceiverService {
+
   // Issue Creator for the Log Types
   cpuUtilizationIssueCreator: CpuUtilizationIssueCreatorComponent;
   timeoutIssueCreator: TimeoutIssueCreatorComponent;
   cbOpenIssueCreator: CbOpenIssueCreatorComponent;
   errorResponseIssueCreator: ErrorResponseIssueCreatorComponent;
-
-  consumer: any;
-  kafka: Kafka;
-  kafkaUrl: string;
-
+  
   constructor(
     private http: HttpService,
     private configService: ConfigService,
     @InjectModel('logs') private logModel: Model<Logs>,
-    private readonly configService: ConfigService,
   ) {
     // Create an Issue Creator for each LogType
     this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(http, configService);
     this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(http, configService);
     this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(http, configService);
     this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(http, configService);
-    this.kafkaUrl = this.configService.get<string>('KAFKA_URL', 'localhost:9092');
-    this.kafka = new Kafka({
-      clientId: 'issue-creator',
-      brokers: [this.kafkaUrl]
-      
-    }),
-    this.consumer = this.kafka.consumer({ groupId: 'my-group '});
-  }
-
-  onModuleInit() {
-    this.startConsuming();
   }
 
   /**
@@ -118,24 +103,5 @@ export class LogReceiverService implements OnModuleInit {
    */
   async getLogsByServiceId(id: any) {
     return this.logModel.find({ "serviceId": id }).exec();
-  }
-  /**
-   * Connecting to kafka instance and begin consuming
-   * incoming messages are saved to the collection logs in the mongodb
-   * 
-   * Consumer is subscribed to the logs topic at the kafka instance
-   */
-  async startConsuming() {
-    await this.consumer.connect();
-    await this.consumer.subscribe({ topic: 'logs', fromBeginning: true,});
-
-    await this.consumer.run({
-      eachMessage: async ({topic, partition, message}) => {
-        if (message.value != null) {
-          let log: LogMessageFormat = JSON.parse(message.value.toString());
-          this.addLogMessageToDatabase(log);
-        }
-      }
-    })
   }
 }

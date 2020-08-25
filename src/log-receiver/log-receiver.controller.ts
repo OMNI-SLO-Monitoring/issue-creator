@@ -9,8 +9,7 @@ import { LogMessageFormat } from 'logging-format';
 export class LogReceiverController {
   constructor(private logRcvService: LogReceiverService) {}
   /**
-   * Logs are received here and handled depending on the log type e.g. CPU, Error etc.
-   * 
+   * Logs are received here and handled accordingly
    * @param logMessage is the log that is sent by the monitors and received here
    */
   @Post()

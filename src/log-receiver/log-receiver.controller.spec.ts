@@ -6,7 +6,6 @@ import { HttpModule } from '@nestjs/common';
 import { DbMock } from '../db-mock-data/database-mock';
 import { ConfigModule } from '@nestjs/config';
 
-
 describe('LogReceiver Controller', () => {
   let controller: LogReceiverController;
 
@@ -25,6 +24,7 @@ describe('LogReceiver Controller', () => {
 
     controller = module.get<LogReceiverController>(LogReceiverController);
   });
+
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });

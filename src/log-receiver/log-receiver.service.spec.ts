@@ -6,7 +6,6 @@ import { LogType} from 'logging-format';
 import { DbMock } from '../db-mock-data/database-mock';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 
-
 describe('LogReceiverService', () => {
   let service: LogReceiverService;
 
