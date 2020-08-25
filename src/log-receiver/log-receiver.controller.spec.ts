@@ -5,6 +5,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { HttpModule, Logger } from '@nestjs/common';
 import { dbMock } from '../db-mock-data/database-mock';
 
+
 describe('LogReceiver Controller', () => {
   let controller: LogReceiverController;
 
@@ -23,7 +24,6 @@ describe('LogReceiver Controller', () => {
 
     controller = module.get<LogReceiverController>(LogReceiverController);
   });
-
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });

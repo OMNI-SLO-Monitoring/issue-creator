@@ -5,6 +5,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { LogMessageFormat, LogType } from 'logging-format';
 import { dbMock } from '../db-mock-data/database-mock';
 
+
 describe('LogReceiverService', () => {
   let service: LogReceiverService;
 
