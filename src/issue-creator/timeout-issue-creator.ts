@@ -7,10 +7,8 @@ import { ConfigService } from '@nestjs/config';
  * TimeoutIssueComponent handles Timeout Logs, it extends IssueCreator to enable individual issue creation for timeout issues
  */
 export class TimeoutIssueCreatorComponent extends IssueCreator {
-  issueCreator: IssueCreator;
   constructor(http: HttpService, configService: ConfigService) {
     super(http, configService);
-    this.issueCreator = new IssueCreator(http, configService);
   }
 
   /**
@@ -21,7 +19,7 @@ export class TimeoutIssueCreatorComponent extends IssueCreator {
    */
   async handleLog(log: LogMessageFormat) {
     if (log.type != LogType.TIMEOUT) throw 'Wrong LogType';
-    return this.issueCreator.createIssueFromLog(log);
+    return this.createIssueFromLog(log);
   }
 
 }

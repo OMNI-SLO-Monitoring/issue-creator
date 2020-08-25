@@ -7,10 +7,8 @@ import { ConfigService } from '@nestjs/config';
  * CpuUtilizationIssueComponent handles CpuUtilization Logs, it extends IssueCreator to enable individual issue creation for cpu issues
  */
 export class CpuUtilizationIssueCreatorComponent extends IssueCreator {
-  issueCreator: IssueCreator;
   constructor(http: HttpService, configService: ConfigService) {
     super(http, configService);
-    this.issueCreator = new IssueCreator(http, configService);
   }
 
   /**
@@ -21,6 +19,6 @@ export class CpuUtilizationIssueCreatorComponent extends IssueCreator {
    */
   async handleLog(log: LogMessageFormat) {
     if (log.type != LogType.CPU) throw 'Wrong LogType';
-    return this.issueCreator.createIssueFromLog(log);
+    return this.createIssueFromLog(log);
   }
 }

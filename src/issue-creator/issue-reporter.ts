@@ -4,7 +4,7 @@ import { IssueFormat } from '../IssueFormat';
 import { ConfigService } from '@nestjs/config';
 
 /**
- * Provides the basic functionality every "detailed" IssueComponent should have
+ * Provides the basic functionality every "detailed" IssueCreator should have
  */
 export abstract class IssueReporter {
   api = this.configService.get<string>('BACKEND_API')

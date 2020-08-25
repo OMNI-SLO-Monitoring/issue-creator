@@ -4,8 +4,8 @@ import { LogMessageFormat } from 'logging-format';
 import { IssueFormat } from '../IssueFormat';
 import { ConfigService } from '@nestjs/config';
 /**
- * generic IssueCreator class, it extends IssueReporter to report issues that were created issues 
- * and it implements the IssueCreatorComponent to handle the incoming logs.
+ * generic IssueCreator class. It extends IssueReporter to report issues that were created.
+ * It implements the IssueCreatorComponent to handle the incoming logs.
  */
 export class IssueCreator extends IssueReporter {
   id: string;

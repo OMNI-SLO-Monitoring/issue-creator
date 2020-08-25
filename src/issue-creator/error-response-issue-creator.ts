@@ -7,10 +7,8 @@ import { ConfigService } from '@nestjs/config';
  * ErrorResponseIssueComponent handles ErrorResponse Logs, it extends the IssueCreator to enable individual issue creation for error response issues 
  */
 export class ErrorResponseIssueCreatorComponent extends IssueCreator {
-  issueCreator: IssueCreator;
   constructor(http: HttpService, configService: ConfigService) {
     super(http, configService);
-    this.issueCreator = new IssueCreator(http, configService);
   }
 
   /**
@@ -21,6 +19,6 @@ export class ErrorResponseIssueCreatorComponent extends IssueCreator {
    */
   async handleLog(log: LogMessageFormat) {
     if (log.type != LogType.ERROR) throw 'Wrong LogType';
-    return this.issueCreator.createIssueFromLog(log);
+    return this.createIssueFromLog(log);
   }
 }
