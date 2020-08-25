@@ -46,14 +46,7 @@ $ docker-compose build
 ```bash
 $ docker-compose up
 ```
-#### Start the database only:
-```bash
-$ docker run -d -p 27017:27017 mongo
-```
-#### If the database is running:
-```bash 
-$ npm run start
-```
+
 ## Usage
 
 ```bash
@@ -61,6 +54,5 @@ The issue creator sits at localhost:3500.
 If installed with docker the database is available at localhost:27017.
 Post Request to localhost:3500 to add logs.
 Get Request to localhost:3500 to get all logs.
-The backend should run parallel https://github.com/ccims/ccims-backend with the mockup running on branch apiMockup
 ```
 
