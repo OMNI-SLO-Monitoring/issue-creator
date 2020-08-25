@@ -21,6 +21,9 @@ export class Logs extends Document {
 
   @Prop()
   data: any;
+
+  @Prop()
+  issueID: any;
 }
 
 export const LogsSchema = SchemaFactory.createForClass(Logs);
