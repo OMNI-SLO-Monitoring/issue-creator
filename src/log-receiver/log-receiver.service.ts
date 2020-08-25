@@ -1,4 +1,4 @@
-import { Injectable, Logger, Inject, HttpService, OnModuleInit } from '@nestjs/common';
+import { Injectable, HttpService, OnModuleInit } from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
 import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
@@ -30,18 +30,14 @@ export class LogReceiverService implements OnModuleInit {
 
   constructor(
     private http: HttpService,
+    private configService: ConfigService,
     @InjectModel('logs') private logModel: Model<Logs>,
-    private readonly configService: ConfigService,
   ) {
     // Create an Issue Creator for each LogType
-    this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(
-      http,
-    );
-    this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(http);
-    this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(http);
-    this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(
-      http,
-    );
+    this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(http, configService);
+    this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(http, configService);
+    this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(http, configService);
+    this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(http, configService);
     this.kafkaUrl = this.configService.get<string>('KAFKA_URL', 'localhost:9092');
     this.kafka = new Kafka({
       clientId: 'issue-creator',
@@ -56,38 +52,55 @@ export class LogReceiverService implements OnModuleInit {
   }
 
   /**
-   * Handling of Log messages
-   *
+   * Handles Log messages by delegating them to the respective IssueCreator
+   * 
    * @param logMessage is the log received by the log receiver controller
+   * @returns issueID that was received from the backend
    * This calls the handleLog of the corresponding IssueCreator and passed the log message
+   * 
    */
-  handleLogMessage(logMessage: LogMessageFormat) {
+  async handleLogMessage(logMessage: LogMessageFormat) {
+    let issueID;
     switch (logMessage.type) {
       case LogType.CPU:
-        this.cpuUtilizationIssueCreator.handleLog(logMessage);
+        issueID = await this.cpuUtilizationIssueCreator.handleLog(logMessage);
         break;
       case LogType.CB_OPEN:
-        this.cbOpenIssueCreator.handleLog(logMessage);
+        issueID = await this.cbOpenIssueCreator.handleLog(logMessage);
         break;
       case LogType.ERROR:
-        this.errorResponseIssueCreator.handleLog(logMessage);
+        issueID = await this.errorResponseIssueCreator.handleLog(logMessage);
         break;
       case LogType.TIMEOUT:
-        this.timeoutIssueCreator.handleLog(logMessage);
+        issueID = await this.timeoutIssueCreator.handleLog(logMessage)
         break;
       default:
-        throw 'Not Implemented LogType';
+        throw "Not Implemented LogType"
     }
+    return issueID;
   }
+  
   /**
-   * Writes the received log message into the database
-   *
+   * Writes the received log message and the issue ID into the database 
+   * 
    * @param logMessage Log sent by the monitor
+   * @returns the saved log
    */
   async addLogMessageToDatabase(logMessage: LogMessageFormat): Promise<Logs> {
-    const addedLog = new this.logModel(logMessage);
+    const issueID = await this.handleLogMessage(logMessage);
+    const log = {
+      time: logMessage.time,
+      source: logMessage.source,
+      detector: logMessage.detector,
+      message: logMessage.message,
+      type: logMessage.type,
+      data: logMessage.data,
+      issueID: issueID
+    }
+    const addedLog = new this.logModel(log);
     return addedLog.save();
   }
+
   /**
    * Gets all logs from the database
    *
@@ -96,6 +109,7 @@ export class LogReceiverService implements OnModuleInit {
   async getAllLogs(): Promise<Logs[]> {
     return this.logModel.find().exec();
   }
+
   /**
    * Gets all logs from a certain service from the database
    * 
@@ -117,7 +131,7 @@ export class LogReceiverService implements OnModuleInit {
     await this.consumer.run({
       eachMessage: async ({topic, partition, message}) => {
         if (message.value != null) {
-          let log: LogMessageFormat = JSON.parse(message.value.toString());
+          const log: LogMessageFormat = JSON.parse(message.value.toString());
           this.addLogMessageToDatabase(log);
         }
       }
