@@ -3,7 +3,7 @@ import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
 import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
 import { TimeoutIssueCreatorComponent } from '../issue-creator/timeout-issue-creator';
-import { CbOpenIssueCreatorComponent } from '../issue-creator/cb-open-issue-creator';
+import { CbOpenIssueCreatorComponent } from '../issue-creator/cp-open-issue-creator';
 import { ErrorResponseIssueCreatorComponent } from '../issue-creator/error-response-issue-creator';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from "mongoose";
@@ -17,28 +17,31 @@ import { Kafka } from "kafkajs";
  * to the issue assigner service
  */
 @Injectable()
+
 export class LogReceiverService implements OnModuleInit {
   // Issue Creator for the Log Types
   cpuUtilizationIssueCreator: CpuUtilizationIssueCreatorComponent;
   timeoutIssueCreator: TimeoutIssueCreatorComponent;
   cbOpenIssueCreator: CbOpenIssueCreatorComponent;
   errorResponseIssueCreator: ErrorResponseIssueCreatorComponent;
-
   consumer: any;
   kafka: Kafka;
   kafkaUrl: string;
 
   constructor(
     private http: HttpService,
-    private configService: ConfigService,
     @InjectModel('logs') private logModel: Model<Logs>,
     private readonly configService: ConfigService,
   ) {
     // Create an Issue Creator for each LogType
-    this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(http, configService);
-    this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(http, configService);
-    this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(http, configService);
-    this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(http, configService);
+    this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(
+      http,
+    );
+    this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(http);
+    this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(http);
+    this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(
+      http,
+    );
     this.kafkaUrl = this.configService.get<string>('KAFKA_URL', 'localhost:9092');
     this.kafka = new Kafka({
       clientId: 'issue-creator',
@@ -53,71 +56,53 @@ export class LogReceiverService implements OnModuleInit {
   }
 
   /**
-   * Handles Log messages by delegating them to the respective IssueCreator
-   * 
+   * Handling of Log messages
+   *
    * @param logMessage is the log received by the log receiver controller
-   * @returns issueID that was received from the backend
    * This calls the handleLog of the corresponding IssueCreator and passed the log message
-   * 
    */
-  async handleLogMessage(logMessage: LogMessageFormat) {
-    let issueID;
+  handleLogMessage(logMessage: LogMessageFormat) {
     switch (logMessage.type) {
       case LogType.CPU:
-        issueID = await this.cpuUtilizationIssueCreator.handleLog(logMessage);
+        this.cpuUtilizationIssueCreator.handleLog(logMessage);
         break;
       case LogType.CB_OPEN:
-        issueID = await this.cbOpenIssueCreator.handleLog(logMessage);
+        this.cbOpenIssueCreator.handleLog(logMessage);
         break;
       case LogType.ERROR:
-        issueID = await this.errorResponseIssueCreator.handleLog(logMessage);
+        this.errorResponseIssueCreator.handleLog(logMessage);
         break;
       case LogType.TIMEOUT:
-        issueID = await this.timeoutIssueCreator.handleLog(logMessage)
+        this.timeoutIssueCreator.handleLog(logMessage);
         break;
       default:
-        throw "Not Implemented LogType"
+        throw 'Not Implemented LogType';
     }
-    return issueID;
   }
   /**
-   * Writes the received log message and the issue ID into the database 
-   * 
+   * Writes the received log message into the database
+   *
    * @param logMessage Log sent by the monitor
-   * @returns the saved log
    */
   async addLogMessageToDatabase(logMessage: LogMessageFormat): Promise<Logs> {
-    const issueID = await this.handleLogMessage(logMessage);
-    const log = {
-      time: logMessage.time,
-      source: logMessage.source,
-      detector: logMessage.detector,
-      message: logMessage.message,
-      type: logMessage.type,
-      data: logMessage.data,
-      issueID: issueID
-    }
-    const addedLog = new this.logModel(log);
+    const addedLog = new this.logModel(logMessage);
     return addedLog.save();
   }
   /**
    * Gets all logs from the database
-   * 
+   *
    * @returns all logs from the database
    */
   async getAllLogs(): Promise<Logs[]> {
     return this.logModel.find().exec();
   }
-
-
-
   /**
    * Gets all logs from a certain service from the database
    * 
    * @param id id of the service that reported a log
    */
-  async getLogsByServiceId(id: any) {
-    return this.logModel.find({ "serviceId": id }).exec();
+  async getLogsByServiceId(id : any) {
+    return this.logModel.find({"serviceId": id}).exec();
   }
   /**
    * Connecting to kafka instance and begin consuming

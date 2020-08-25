@@ -27,8 +27,6 @@
     "@nestjs/mongoose": "^7.0.2",
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/serve-static": "^2.1.1",
-    "graphql": "^15.3.0",
-    "graphql-request": "^3.0.0",
     "dotenv": "^8.2.0",
     "kafkajs": "^1.12.0",
     "logging-format": "git+https://github.com/ccims/logging-message-format.git#v1.1.1",
