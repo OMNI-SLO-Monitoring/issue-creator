@@ -1,4 +1,4 @@
-import { Injectable, Logger, Inject, HttpService, OnModuleInit } from '@nestjs/common';
+import { Injectable, HttpService, OnModuleInit } from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
 import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
@@ -30,7 +30,6 @@ export class LogReceiverService implements OnModuleInit {
 
   constructor(
     private http: HttpService,
-    private configService: ConfigService,
     @InjectModel('logs') private logModel: Model<Logs>,
     private readonly configService: ConfigService,
   ) {
@@ -132,7 +131,7 @@ export class LogReceiverService implements OnModuleInit {
     await this.consumer.run({
       eachMessage: async ({topic, partition, message}) => {
         if (message.value != null) {
-          let log: LogMessageFormat = JSON.parse(message.value.toString());
+          const log: LogMessageFormat = JSON.parse(message.value.toString());
           this.addLogMessageToDatabase(log);
         }
       }
