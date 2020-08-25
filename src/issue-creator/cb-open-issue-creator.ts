@@ -4,21 +4,21 @@ import { IssueCreator } from './issue-creator';
 import { ConfigService } from '@nestjs/config';
 
 /**
- * ErrorResponseIssueComponent handles ErrorResponse Logs, it extends the IssueCreator to enable individual issue creation for error response issues 
+ * CbOpenIssueComponent handles CB open Logs, it extends IssueCreator to enable individual issue creation for cb open issues 
  */
-export class ErrorResponseIssueCreatorComponent extends IssueCreator {
+export class CbOpenIssueCreatorComponent extends IssueCreator {
   constructor(http: HttpService, configService: ConfigService) {
     super(http, configService);
   }
 
   /**
-   * handles error response logs by creating an Issue and sending it to the API: https://github.com/ccims/ccims-backend/tree/apiMockup
+   * handles cb open logs by creating an Issue and sending it to the API: https://github.com/ccims/ccims-backend/tree/apiMockup
    * 
-   * @param log received log in the LogMessageFormat
+   * @param log received log 
    * @returns the issue ID received from the backend
    */
   async handleLog(log: LogMessageFormat) {
-    if (log.type != LogType.ERROR) throw 'Wrong LogType';
+    if (log.type != LogType.CB_OPEN) throw 'Wrong LogType';
     return this.createIssueFromLog(log);
   }
 }

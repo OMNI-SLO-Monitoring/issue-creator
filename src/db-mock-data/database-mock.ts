@@ -1,9 +1,42 @@
 import { LogType, LogMessageFormat } from 'logging-format';
 
+/**
+ * An object that returns a fixed array of logs that represent the
+ * entries of the mock database
+ */
+const execObj = {
+  exec: (): any[] => {
+    return [
+      {
+        type: LogType.TIMEOUT,
+        time: Date.now(),
+        source: 'Database Service',
+        detector: 'Price Service',
+        message: 'Error',
+        data: {
+          timeoutDuration: 31,
+        },
+        issueID: 'Issue_1'
+      },
+      {
+        type: LogType.CPU,
+        time: Date.now(),
+        source: 'Database Service',
+        detector: 'Error Response Monitor',
+        message: 'Error',
+        data: {
+          cpuUtilization: 99,
+        },
+        issueID: 'Issue_1'
+      },
+    ];
+  },
+};
+
 /**This mocks the database and its functions especially
  *the function logic
  */
-export class dbMock {
+export class DbMock {
   data: LogMessageFormat;
   constructor(dto: LogMessageFormat) {
     this.data = dto;
@@ -26,31 +59,3 @@ export class dbMock {
   };
 }
 
-/**
- * An object that returns a fixed array of logs that represent the
- * entries of the mock database
- */
-let execObj = {
-  exec: (): LogMessageFormat[] => {
-    return [
-      {
-        type: LogType.TIMEOUT,
-        time: Date.now(),
-        source: 'Database Service',
-        detector: 'Price Service',
-        data: {
-          timeoutDuration: 31,
-        },
-      },
-      {
-        type: LogType.CPU,
-        time: Date.now(),
-        source: 'Database Service',
-        detector: 'Error Response Monitor',
-        data: {
-          cpuUtilization: 99,
-        },
-      },
-    ];
-  },
-};
