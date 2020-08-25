@@ -28,6 +28,8 @@
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/serve-static": "^2.1.1",
     "dotenv": "^8.2.0",
+    "graphql": "^15.3.0",
+    "graphql-request": "^3.0.0",
     "kafkajs": "^1.12.0",
     "logging-format": "git+https://github.com/ccims/logging-message-format.git#v1.1.1",
     "mongoose": "^5.9.24",

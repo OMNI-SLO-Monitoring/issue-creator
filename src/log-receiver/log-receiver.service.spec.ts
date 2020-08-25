@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LogReceiverService } from './log-receiver.service';
 import { HttpModule } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
-import { LogMessageFormat, LogType } from 'logging-format';
+import { LogType } from 'logging-format';
 import { dbMock } from '../db-mock-data/database-mock';
 import { ConfigModule } from '@nestjs/config';
 
