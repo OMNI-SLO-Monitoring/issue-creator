@@ -45,6 +45,14 @@ export class ServiceRegistrationService {
         return res.save();
     }
 
+    async checkIfRegistered(serviceId: string): Promise<boolean> {
+        const res = await this.serviceModel.findById(serviceId);
+        if (res) {
+            return true;
+        }
+        return false;
+    }
+
     private async transmitServiceId(service: Service): Promise<boolean> {
         try {
             await this.http.post(`${service.serviceUrl}/service-registration`, {

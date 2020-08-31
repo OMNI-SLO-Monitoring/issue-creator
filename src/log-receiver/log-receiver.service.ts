@@ -1,4 +1,4 @@
-import { Injectable, Logger, Inject, HttpService } from '@nestjs/common';
+import { Injectable, Logger, Inject, HttpService, HttpException } from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
@@ -9,6 +9,7 @@ import { ErrorResponseIssueCreatorComponent } from '../issue-creator/error-respo
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Logs } from 'src/schema/logs.schema';
+import { ServiceRegistrationService } from 'src/service-registration/service-registration.service';
 
 /**
  * This service handles the log message passed down from the controller
@@ -26,6 +27,7 @@ export class LogReceiverService {
   constructor(
     private http: HttpService,
     @InjectModel('logs') private logModel: Model<Logs>,
+    private serviceRegistration: ServiceRegistrationService
   ) {
     // Create an Issue Creator for each LogType
     this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(
@@ -44,7 +46,16 @@ export class LogReceiverService {
    * @param logMessage is the log received by the log receiver controller
    * This calls the handleLog of the corresponding IssueCreator and passed the log message
    */
-  handleLogMessage(logMessage: LogMessageFormat) {
+  async handleLogMessage(logMessage: LogMessageFormat) {
+
+    if (!logMessage?.detector) {
+      throw new HttpException("LogMessage without detector Id", 406);
+    } 
+
+    if (!(await this.serviceRegistration.checkIfRegistered(logMessage.detector))) {
+      throw new HttpException("LogMessage detector is not registered", 401);
+    }
+
     switch (logMessage.type) {
       case LogType.CPU:
         this.cpuUtilizationIssueCreator.handleLog(logMessage);
@@ -61,6 +72,8 @@ export class LogReceiverService {
       default:
         throw 'Not Implemented LogType';
     }
+
+    this.addLogMessageToDatabase(logMessage);
   }
   /**
    * Writes the received log message into the database
