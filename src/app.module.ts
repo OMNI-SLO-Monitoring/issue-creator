@@ -6,6 +6,7 @@ import { LogReceiverService } from './log-receiver/log-receiver.service';
 import { ServiceRegistrationController } from './service-registration/service-registration.controller';
 import { ServiceRegistrationService } from './service-registration/service-registration.service';
 import { ServiceSchema } from './schema/service.schema';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ServiceSchema } from './schema/service.schema';
       { name: 'logs', schema: LogsSchema },
       { name: 'service', schema: ServiceSchema }
     ]),
+    ConfigModule.forRoot({isGlobal:true})
   ],
   controllers: [
     LogReceiverController,

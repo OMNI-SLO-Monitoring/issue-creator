@@ -22,6 +22,8 @@ export class LogReceiverController {
 
   /**
    * Returns all logs in the database
+   * 
+   * @returns all logs from the database
    */
   @Get()
   getAllLogs() {
