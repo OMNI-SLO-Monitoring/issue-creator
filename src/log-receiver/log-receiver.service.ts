@@ -1,15 +1,14 @@
-import { Injectable, Logger, Inject, HttpService, HttpException } from '@nestjs/common';
+import { Injectable, HttpService, HttpException } from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
 import { TimeoutIssueCreatorComponent } from '../issue-creator/timeout-issue-creator';
 import { CbOpenIssueCreatorComponent } from '../issue-creator/cp-open-issue-creator';
 import { ErrorResponseIssueCreatorComponent } from '../issue-creator/error-response-issue-creator';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Logs } from 'src/schema/logs.schema';
-import { ServiceRegistrationService } from 'src/service-registration/service-registration.service';
+import { Logs } from '../schema/logs.schema';
+import { ServiceRegistrationService } from '../service-registration/service-registration.service';
 
 /**
  * This service handles the log message passed down from the controller
@@ -98,6 +97,6 @@ export class LogReceiverService {
    * @param id id of the service that reported a log
    */
   async getLogsByServiceId(id : any) {
-    return this.logModel.find({"serviceId": id}).exec();
+    return this.logModel.find({"detector": id}).exec();
   }
 }

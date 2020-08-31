@@ -4,6 +4,7 @@ import { LogReceiverService } from './log-receiver.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { HttpModule, Logger } from '@nestjs/common';
 import { dbMock } from '../db-mock-data/database-mock';
+import { ServiceRegistrationService } from '../service-registration/service-registration.service';
 
 describe('LogReceiver Controller', () => {
   let controller: LogReceiverController;
@@ -14,6 +15,7 @@ describe('LogReceiver Controller', () => {
       controllers: [LogReceiverController],
       providers: [
         LogReceiverService,
+        ServiceRegistrationService,
         {
           provide: getModelToken('logs'),
           useValue: dbMock,

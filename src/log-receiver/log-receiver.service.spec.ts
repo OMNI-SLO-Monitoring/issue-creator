@@ -4,6 +4,7 @@ import { HttpModule } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { LogMessageFormat, LogType } from 'logging-format';
 import { dbMock } from '../db-mock-data/database-mock';
+import { ServiceRegistrationService } from '../service-registration/service-registration.service';
 
 describe('LogReceiverService', () => {
   let service: LogReceiverService;
@@ -13,6 +14,7 @@ describe('LogReceiverService', () => {
       imports: [HttpModule],
       providers: [
         LogReceiverService,
+        ServiceRegistrationService,
         {
           provide: getModelToken('logs'),
           useValue: dbMock,

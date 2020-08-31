@@ -1,6 +1,6 @@
 import { Injectable, HttpService } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { ServiceSchema, IService, Service } from "src/schema/service.schema";
+import { IService, Service } from "../schema/service.schema";
 import { Model } from "mongoose";
 
 @Injectable()

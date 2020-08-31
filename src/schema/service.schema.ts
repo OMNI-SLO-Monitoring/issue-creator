@@ -2,10 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 export interface IService {
-  id: string,
+  id?: string,
   name: string;
   serviceUrl: string;
-  idRecieved: boolean;
+  idRecieved?: boolean;
 }
 
 @Schema()
