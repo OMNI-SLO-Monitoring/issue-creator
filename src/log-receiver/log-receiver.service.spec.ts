@@ -55,7 +55,7 @@ describe('LogReceiverService', () => {
     };
     jest
       .spyOn(service.cbOpenIssueCreator, 'handleLog')
-      .mockImplementationOnce(() => Promise.resolve('1'));
+      .mockImplementation(() => Promise.resolve('1'));
     expect(await service.addLogMessageToDatabase(logMock)).toStrictEqual(
       logMock,
     );
