@@ -8,7 +8,7 @@ import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
 import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
 import { TimeoutIssueCreatorComponent } from '../issue-creator/timeout-issue-creator';
-import { CbOpenIssueCreatorComponent } from '../issue-creator/cp-open-issue-creator';
+import { CbOpenIssueCreatorComponent } from '../issue-creator/cb-open-issue-creator';
 import { ErrorResponseIssueCreatorComponent } from '../issue-creator/error-response-issue-creator';
 import { InjectModel } from '@nestjs/mongoose';
 import { ServiceRegistrationService } from '../service-registration/service-registration.service';
@@ -108,7 +108,7 @@ export class LogReceiverService implements OnModuleInit {
         throw 'Not Implemented LogType';
     }
 
-    this.addLogMessageToDatabase(logMessage);
+    //this.addLogMessageToDatabase(logMessage);
     return issueID;
   }
 

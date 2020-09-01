@@ -13,10 +13,10 @@ export abstract class IssueCreator extends IssueReporter {
     super(http, configService);
   }
 
-   /**
+  /**
    * creating an Issue from a log and sending that issue to the API: https://github.com/ccims/ccims-backend/tree/apiMockup
-   * 
-   * @param log received log 
+   *
+   * @param log received log
    * @returns the issue ID received from the backend
    */
   async createIssueFromLog(log: LogMessageFormat) {
@@ -30,13 +30,13 @@ export abstract class IssueCreator extends IssueReporter {
       locations: [`${log.source}`],
       startDate: log.time,
       clientMutationID: 'id1234',
-    }
+    };
     this.id = await this.reportIssue(issue);
     return this.id;
   }
   /**
    * basic functionality to handle logs that every IssueCreator should have
-   * 
+   *
    * @param log incoming Log
    */
   abstract handleLog(log: LogMessageFormat);
