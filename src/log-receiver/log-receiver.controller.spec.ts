@@ -2,10 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LogReceiverController } from './log-receiver.controller';
 import { LogReceiverService } from './log-receiver.service';
 import { getModelToken } from '@nestjs/mongoose';
-import { HttpModule} from '@nestjs/common';
-import { dbMock } from '../db-mock-data/database-mock';
+import { HttpModule } from '@nestjs/common';
+import { dbLogMock } from '../db-mock-data/database-log-mock';
 import { ServiceRegistrationService } from '../service-registration/service-registration.service';
 import { ConfigModule } from '@nestjs/config';
+import { dbServiceMock } from '../db-mock-data/database-service-mock';
 
 describe('LogReceiver Controller', () => {
   let controller: LogReceiverController;
@@ -19,7 +20,11 @@ describe('LogReceiver Controller', () => {
         ServiceRegistrationService,
         {
           provide: getModelToken('logs'),
-          useValue: dbMock,
+          useValue: dbLogMock,
+        },
+        {
+          provide: getModelToken('service'),
+          useValue: dbServiceMock,
         },
       ],
     }).compile();

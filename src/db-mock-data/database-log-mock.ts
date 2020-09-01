@@ -1,11 +1,11 @@
 import { LogType, LogMessageFormat } from 'logging-format';
 
-/**This mocks the database and its functions especially
+/**This mocks the database that contains the logs and its functions especially
  *the function logic
  */
-export class dbMock {
-  data: LogMessageFormat;
-  constructor(dto: LogMessageFormat) {
+export class dbLogMock {
+  data;
+  constructor(dto) {
     this.data = dto;
   }
 
@@ -13,7 +13,7 @@ export class dbMock {
    * Mocks the save function of the Model by returning
    * the added log entry
    */
-  save = (): LogMessageFormat => {
+  save = () => {
     return this.data;
   };
 
@@ -27,11 +27,11 @@ export class dbMock {
 }
 
 /**
- * An object that returns a fixed array of logs that represent the
+ * An object that returns a fixed array of logs that represents the
  * entries of the mock database
  */
 let execObj = {
-  exec: (): LogMessageFormat[] => {
+  exec: () => {
     return [
       {
         type: LogType.TIMEOUT,
@@ -41,6 +41,7 @@ let execObj = {
         data: {
           timeoutDuration: 31,
         },
+        issueID: '1',
       },
       {
         type: LogType.CPU,
@@ -50,6 +51,7 @@ let execObj = {
         data: {
           cpuUtilization: 99,
         },
+        issueID: '2',
       },
     ];
   },

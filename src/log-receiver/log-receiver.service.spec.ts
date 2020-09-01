@@ -2,10 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LogReceiverService } from './log-receiver.service';
 import { HttpModule } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
-import { LogType } from 'logging-format';
-import { dbMock } from '../db-mock-data/database-mock';
+import { LogType, LogMessageFormat } from 'logging-format';
+import { dbLogMock } from '../db-mock-data/database-log-mock';
 import { ServiceRegistrationService } from '../service-registration/service-registration.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { dbServiceMock } from '../db-mock-data/database-service-mock';
 
 describe('LogReceiverService', () => {
   let service: LogReceiverService;
@@ -16,9 +17,14 @@ describe('LogReceiverService', () => {
       providers: [
         LogReceiverService,
         ServiceRegistrationService,
+        ConfigService,
         {
           provide: getModelToken('logs'),
-          useValue: dbMock,
+          useValue: dbLogMock,
+        },
+        {
+          provide: getModelToken('service'),
+          useValue: dbServiceMock,
         },
       ],
     }).compile();
@@ -39,16 +45,20 @@ describe('LogReceiverService', () => {
       type: LogType.CB_OPEN,
       time: Date.now(),
       source: 'Database Service',
-      detector: 'Price Service',
+      detector: '1',
       message: 'Error',
       data: {
         failedResponses: 31,
         openTime: 10,
       },
-      issueID: 'Issue_1'
+      issueID: '1',
     };
-    jest.spyOn(service.cbOpenIssueCreator, "handleLog").mockImplementation(() => Promise.resolve("Issue_1"));
-    expect(await service.addLogMessageToDatabase(logMock)).toStrictEqual(logMock);
+    jest
+      .spyOn(service.cbOpenIssueCreator, 'handleLog')
+      .mockImplementationOnce(() => Promise.resolve('1'));
+    expect(await service.addLogMessageToDatabase(logMock)).toStrictEqual(
+      logMock,
+    );
   });
 
   /**
