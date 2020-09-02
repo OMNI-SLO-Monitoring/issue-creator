@@ -1,6 +1,6 @@
 import { Module, HttpModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { LogsSchema } from 'src/schema/logs.schema';
+import { LogsSchema } from './schema/logs.schema';
 import { LogReceiverController } from './log-receiver/log-receiver.controller';
 import { LogReceiverService } from './log-receiver/log-receiver.service';
 import { ServiceRegistrationController } from './service-registration/service-registration.controller';
