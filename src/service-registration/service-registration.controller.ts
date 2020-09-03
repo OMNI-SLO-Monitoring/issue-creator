@@ -38,12 +38,7 @@ export class ServiceRegistrationController {
    * @param id of a registered Service
    */
   @Delete('/:id')
-  deleteSelection(@Param('id') id: string) {
+  deleteService(@Param('id') id: string) {
     return this.serviceRegistration.deleteService(id);
-  }
-
-  @Post('/:id')
-  retransmitServiceId(@Param('id') id: string) {
-    return this.serviceRegistration.retransmitServiceId(id);
   }
 }

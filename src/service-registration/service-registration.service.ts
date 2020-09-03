@@ -18,7 +18,6 @@ export class ServiceRegistrationService {
   async addService(service: IService): Promise<Service> {
     const res = new this.serviceModel(service);
     service.id = res.id;
-    res.idReceived = await this.transmitServiceId(res);
     return res.save();
   }
 
@@ -41,32 +40,11 @@ export class ServiceRegistrationService {
     return this.serviceModel.find({}).exec();
   }
 
-  async retransmitServiceId(serviceId: string) {
-    const res = await this.serviceModel.findById(serviceId);
-    res.idReceived = await this.transmitServiceId(res);
-    return res.save();
-  }
-
-  async checkIfRegistered(serviceId: string): Promise<boolean> {
-    const res = await this.serviceModel.findById(serviceId);
+  async checkIfRegistered(serviceUrl: string): Promise<boolean> {
+    const res = await this.serviceModel.find({ serviceUrl: serviceUrl });
     if (res) {
       return true;
     }
     return false;
-  }
-
-  private async transmitServiceId(service: Service): Promise<boolean> {
-    try {
-      await this.http
-        .post(`${service.serviceUrl}/service-registration`, {
-          name: service.name,
-          id: service.id,
-        })
-        .toPromise();
-      return true;
-    } catch (error) {
-      console.log('Could not transmit Id');
-      return false;
-    }
   }
 }
