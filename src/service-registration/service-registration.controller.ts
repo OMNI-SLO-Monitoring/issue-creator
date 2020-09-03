@@ -17,7 +17,7 @@ export class ServiceRegistrationController {
   /**
    * @returns all registered services in the database
    */
-  @Get('/getall') // TODO: WHY????????
+  @Get('/all') // ? Warum funktioniert @Get() nicht
   getServices() {
     return this.serviceRegistration.getAllServices();
   }
