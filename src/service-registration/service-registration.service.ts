@@ -40,6 +40,10 @@ export class ServiceRegistrationService {
     return this.serviceModel.find({}).exec();
   }
 
+  async getService(id: string): Promise<Service> {
+    return await this.serviceModel.findById(id);
+  }
+
   async checkIfRegistered(serviceUrl: string): Promise<boolean> {
     const res = await this.serviceModel.find({ serviceUrl: serviceUrl });
     if (res) {

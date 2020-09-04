@@ -80,12 +80,16 @@ export class LogReceiverService implements OnModuleInit {
    *
    */
   async handleLogMessage(logMessage: LogMessageFormat) {
+    console.log("processing: ", logMessage)
+
     if (!logMessage?.detector) {
       throw new HttpException('LogMessage without detector Id', 406);
     }
 
     if (!(await this.serviceRegistration.checkIfRegistered(logMessage.detector))) {
       throw new HttpException('LogMessage detector is not registered', 401);
+    } else {
+      console.log("Detector is registered")
     }
 
     let issueID;
@@ -106,7 +110,7 @@ export class LogReceiverService implements OnModuleInit {
         throw 'Not Implemented LogType';
     }
 
-    //this.addLogMessageToDatabase(logMessage);
+    this.addLogMessageToDatabase(logMessage);
     return issueID;
   }
 
@@ -146,7 +150,8 @@ export class LogReceiverService implements OnModuleInit {
    * @param id id of the service that reported a log
    */
   async getLogsByServiceId(id: any) {
-    return this.logModel.find({ detector: id }).exec();
+    const service = await this.serviceRegistration.getService(id);
+    return this.logModel.find({ detector: service.serviceUrl }).exec();
   }
   /**
    * Connecting to kafka instance and begin consuming
