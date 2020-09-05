@@ -55,6 +55,7 @@ export class LogReceiverService implements OnModuleInit {
     this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(
       http,
       configService,
+      this.logModel
     );
     this.kafkaUrl = this.configService.get<string>(
       'KAFKA_URL',
@@ -110,7 +111,7 @@ export class LogReceiverService implements OnModuleInit {
         throw 'Not Implemented LogType';
     }
 
-    this.addLogMessageToDatabase(logMessage);
+    this.addLogMessageToDatabase(logMessage, issueID);
     return issueID;
   }
 
@@ -120,8 +121,7 @@ export class LogReceiverService implements OnModuleInit {
    * @param logMessage Log sent by the monitor
    * @returns the saved log
    */
-  async addLogMessageToDatabase(logMessage: LogMessageFormat): Promise<Logs> {
-    const issueID = await this.handleLogMessage(logMessage);
+  async addLogMessageToDatabase(logMessage: LogMessageFormat, issueID: string): Promise<Logs> {
     const log = {
       time: logMessage.time,
       source: logMessage.source,
@@ -167,7 +167,7 @@ export class LogReceiverService implements OnModuleInit {
       eachMessage: async ({ topic, partition, message }) => {
         if (message.value != null) {
           const log: LogMessageFormat = JSON.parse(message.value.toString());
-          this.addLogMessageToDatabase(log);
+          this.handleLogMessage(log);
         }
       },
     });
