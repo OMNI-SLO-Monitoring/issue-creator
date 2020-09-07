@@ -44,14 +44,14 @@ describe('LogReceiverService', () => {
     const logMock = {
       type: LogType.CB_OPEN,
       time: Date.now(),
-      source: 'Database Service',
-      detector: '1',
+      sourceUrl: 'Database Service',
+      detectorUrl: '1',
       message: 'Error',
       data: {
         failedResponses: 31,
         openTime: 10,
       },
-      issueID: '1',
+      // issueID: '1',
     };
     jest
       .spyOn(service.cbOpenIssueCreator, 'handleLog')

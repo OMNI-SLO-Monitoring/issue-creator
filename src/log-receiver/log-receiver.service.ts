@@ -121,7 +121,7 @@ export class LogReceiverService implements OnModuleInit {
    * @returns the saved log
    */
   async addLogMessageToDatabase(logMessage: LogMessageFormat): Promise<Logs> {
-    const issueID = await this.handleLogMessage(logMessage);
+    // const issueID = await this.handleLogMessage(logMessage);
     const log = {
       time: logMessage.time,
       sourceUrl: logMessage.sourceUrl,
@@ -129,7 +129,7 @@ export class LogReceiverService implements OnModuleInit {
       message: logMessage.message,
       type: logMessage.type,
       data: logMessage.data,
-      issueID: issueID,
+      // issueID: issueID,  // Gets fixed in SLADIM-34
     };
     const addedLog = new this.logModel(log);
     return addedLog.save();
