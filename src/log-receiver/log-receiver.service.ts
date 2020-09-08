@@ -83,11 +83,11 @@ export class LogReceiverService implements OnModuleInit {
   async handleLogMessage(logMessage: LogMessageFormat) {
     console.log("processing: ", logMessage)
 
-    if (!logMessage?.detector) {
+    if (!logMessage?.detectorUrl) {
       throw new HttpException('LogMessage without detector Id', 406);
     }
 
-    if (!(await this.serviceRegistration.checkIfRegistered(logMessage.detector))) {
+    if (!(await this.serviceRegistration.checkIfRegistered(logMessage.detectorUrl))) {
       throw new HttpException('LogMessage detector is not registered', 401);
     } else {
       console.log("Detector is registered")
@@ -124,12 +124,12 @@ export class LogReceiverService implements OnModuleInit {
   async addLogMessageToDatabase(logMessage: LogMessageFormat, issueID: string): Promise<Logs> {
     const log = {
       time: logMessage.time,
-      source: logMessage.source,
-      detector: logMessage.detector,
+      sourceUrl: logMessage.sourceUrl,
+      detectorUrl: logMessage.detectorUrl,
       message: logMessage.message,
       type: logMessage.type,
       data: logMessage.data,
-      issueID: issueID,
+      // issueID: issueID,  // Gets fixed in SLADIM-34
     };
     const addedLog = new this.logModel(log);
     return addedLog.save();
