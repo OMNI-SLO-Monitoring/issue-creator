@@ -42,14 +42,17 @@ export class LogReceiverService implements OnModuleInit {
     // Create an Issue Creator for each LogType
     this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(
       http,
+      this.logModel,
       configService,
     );
     this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(
       http,
+      this.logModel,
       configService,
     );
     this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(
       http,
+      this.logModel,
       configService,
     );
     this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(
