@@ -34,6 +34,7 @@ export abstract class IssueCreator extends IssueReporter {
     this.id = await this.reportIssue(issue);
     return this.id;
   }
+
   /**
    * basic functionality to handle logs that every IssueCreator should have
    *

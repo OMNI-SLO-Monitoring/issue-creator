@@ -46,7 +46,7 @@ export class ErrorResponseIssueCreatorComponent extends IssueCreator {
       }
 
       console.log("Updating Issue with Id ", query[0].issueID)
-      // TODO: Update Issue
+      this.updateLastOccurrence(query[0].issueID, log.time) // TODO: ? Should we add more information to the commend besides time?
 
     } else {
       console.log("Issue does not exist yet");
