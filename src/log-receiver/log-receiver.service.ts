@@ -132,7 +132,7 @@ export class LogReceiverService implements OnModuleInit {
       message: logMessage.message,
       type: logMessage.type,
       data: logMessage.data,
-      // issueID: issueID,  // Gets fixed in SLADIM-34
+      issueID: issueID,  // Gets fixed in SLADIM-34
     };
     const addedLog = new this.logModel(log);
     return addedLog.save();
