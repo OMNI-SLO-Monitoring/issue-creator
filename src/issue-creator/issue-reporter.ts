@@ -45,7 +45,6 @@ export abstract class IssueReporter {
   /**
    * updates a last occurrence of an Issue by adding a comment to the existing Issue.
    * 
-   * 
    * @param issueID the Issue where to add the comment.
    * @param lastOccurrence the last time the Issue occurred.
    * @returns the issueID received when the the request was accepted by the server

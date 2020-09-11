@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class ServiceRegistrationService {
+
   constructor(
     @InjectModel('service') private serviceModel: Model<Service>,
     private http: HttpService,

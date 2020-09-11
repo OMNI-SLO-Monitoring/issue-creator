@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  HttpService,
-  HttpException,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Injectable, HttpService, HttpException, OnModuleInit } from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
 import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
@@ -132,7 +127,7 @@ export class LogReceiverService implements OnModuleInit {
       message: logMessage.message,
       type: logMessage.type,
       data: logMessage.data,
-      issueID: issueID,  // Gets fixed in SLADIM-34
+      issueID: issueID, 
     };
     const addedLog = new this.logModel(log);
     return addedLog.save();
@@ -151,10 +146,12 @@ export class LogReceiverService implements OnModuleInit {
    * Gets all logs from a certain service from the database
    *
    * @param id id of the service that reported a log
+   * 
+   * @returns array of logs where detectorUrl matches url of service corresponding to serviceId
    */
   async getLogsByServiceId(id: any) {
     const service = await this.serviceRegistration.getService(id);
-    return this.logModel.find({ detector: service.serviceUrl }).exec();
+    return this.logModel.find({ detectorUrl: service.serviceUrl }).exec();
   }
   /**
    * Connecting to kafka instance and begin consuming

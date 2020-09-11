@@ -36,19 +36,6 @@ describe('LogReceiverService', () => {
     expect(service).toBeDefined();
   });
 
-  // it('should handle log', () => {
-  //   const log: LogMessageFormat = {
-  //     time: new Date().getTime(),
-  //     type: LogType.CPU,
-  //     detectorUrl: "http://localhost:3000/",
-  //     sourceUrl: null,
-  //     data: {
-  //       cpuUtilization: 100
-  //     }
-  //   }
-  //   expect(service.handleLogMessage(log)).toBeDefined(); // Can't report Issues in test...
-  // })
-
   /**
    * Test function that probes if valid logs are added to database and
    * returned. In this case the test should be successful.

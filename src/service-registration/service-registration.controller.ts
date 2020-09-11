@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Delete,
-  Param,
-  Header,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param } from '@nestjs/common';
 import { IService } from 'src/schema/service.schema';
 import { ServiceRegistrationService } from './service-registration.service';
 
