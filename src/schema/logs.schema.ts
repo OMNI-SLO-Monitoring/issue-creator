@@ -5,10 +5,10 @@ import { LogType } from 'logging-format';
 @Schema()
 export class Logs extends Document {
   @Prop()
-  source: string;
+  sourceUrl: string;
 
   @Prop()
-  detector: string;
+  detectorUrl: string;
 
   @Prop()
   time: number;
