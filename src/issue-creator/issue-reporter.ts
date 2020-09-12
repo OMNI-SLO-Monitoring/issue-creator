@@ -34,11 +34,11 @@ export abstract class IssueReporter {
     `;
     try {
       const data = await request(`${this.api}`, queryIssue, inputData);
-      console.log(JSON.stringify(data, undefined, 2));
       const issueID = data.createIssue.issue.id;
+      console.log("CREATED ISSUE", issueID);
       return issueID;
     } catch (error) {
-      console.error(JSON.stringify(error, undefined, 2));
+      console.error("Error creating issue", error);
     }
   }
 

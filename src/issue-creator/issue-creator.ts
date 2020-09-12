@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
  * It implements the IssueCreatorComponent to handle the incoming logs.
  */
 export abstract class IssueCreator extends IssueReporter {
-  id: string;
+
   constructor(http: HttpService, configService: ConfigService) {
     super(http, configService);
   }
@@ -31,8 +31,7 @@ export abstract class IssueCreator extends IssueReporter {
       startDate: log.time,
       clientMutationID: 'id1234',
     };
-    this.id = await this.reportIssue(issue);
-    return this.id;
+    return this.reportIssue(issue);
   }
 
   /**

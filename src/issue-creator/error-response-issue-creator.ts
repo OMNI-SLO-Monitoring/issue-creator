@@ -47,6 +47,7 @@ export class ErrorResponseIssueCreatorComponent extends IssueCreator {
 
       console.log("Updating Issue with Id ", query[0].issueID)
       this.updateLastOccurrence(query[0].issueID, log.time) // TODO: ? Should we add more information to the comment besides time?
+      return query[0].issueID;
 
     } else {
       console.log("Issue does not exist yet");
