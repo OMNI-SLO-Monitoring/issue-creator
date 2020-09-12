@@ -109,7 +109,6 @@ export class LogReceiverService implements OnModuleInit {
         throw 'Not Implemented LogType';
     }
 
-    console.log("ISSUE", issueID);
     this.addLogMessageToDatabase(logMessage, issueID);
     return issueID;
   }

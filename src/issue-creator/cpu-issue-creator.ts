@@ -34,18 +34,18 @@ export class CpuUtilizationIssueCreatorComponent extends IssueCreator {
       time: { $gte: log.time - this.correspondingIssueTimeInterval } 
     });
 
-    
+    const relatedLog = query.find((log) => log.issueID)
 
-    if (query?.length > 0) {
+    if (relatedLog) {
 
-      if (!query[0].issueID) {
+      if (!relatedLog.issueID) {
         // Issue already exists but latest log doesn't have a IssueId, this should not happen but if it does we create a new issue anyways
         console.log("WARNING: Log does not have a IssueId")
         return this.createIssueFromLog(log);
       }
 
-      console.log("Updating Issue with Id ", query[0].issueID)
-      return this.updateLastOccurrence(query[0].issueID, log.time) // TODO: ? Should we add more information to the commend besides time?
+      console.log("Updating Issue with Id ")
+      return this.updateLastOccurrence(relatedLog.issueID, log.time) // TODO: ? Should we add more information to the commend besides time?
 
     } else {
       console.log("Issue does not exist yet");
