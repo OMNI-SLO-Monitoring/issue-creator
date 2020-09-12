@@ -43,7 +43,7 @@ export abstract class IssueReporter {
   }
 
   /**
-   * updates a last occurrence of an Issue by adding a comment to the existing Issue.
+   * Updates a last occurrence of an Issue by adding a comment to the existing Issue.
    * 
    * @param issueID the Issue where to add the comment.
    * @param lastOccurrence the last time the Issue occurred.
@@ -54,7 +54,7 @@ export abstract class IssueReporter {
     const inputData = {
       input: {
         "issueID": issueID,
-        "body": lastOccurrence
+        "body": 'Last occurred' + lastOccurrence
       }
     };
     const queryIssue = gql`
@@ -68,8 +68,7 @@ export abstract class IssueReporter {
     `;
     try {
       const data = await request(`${this.api}`, queryIssue, inputData);
-      console.log(JSON.stringify(data, undefined, 2));
-      const issueID = data.createIssue.issue.id;
+      console.log(JSON.stringify(data, undefined, 2));      
       return issueID;
     } catch (error) {
       console.error(JSON.stringify(error, undefined, 2));

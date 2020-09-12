@@ -33,7 +33,7 @@ export class ErrorResponseIssueCreatorComponent extends IssueCreator {
     // TODO: Should we include logs with same correlationId for a better stacktrace?
     // TODO: Should we use expected/result as a criterial for when logs belong to an existing issue?
     const query = await this.logModel.find({
-      detector: log.detectorUrl, 
+      detectorUrl: log.detectorUrl, 
       time: { $gte: log.time - this.correspondingIssueTimeInterval } 
     });
 
@@ -46,8 +46,7 @@ export class ErrorResponseIssueCreatorComponent extends IssueCreator {
       }
 
       console.log("Updating Issue with Id ", query[0].issueID)
-      this.updateLastOccurrence(query[0].issueID, log.time) // TODO: ? Should we add more information to the comment besides time?
-      return query[0].issueID;
+      return this.updateLastOccurrence(query[0].issueID, log.time) // TODO: ? Should we add more information to the comment besides time?
 
     } else {
       console.log("Issue does not exist yet");

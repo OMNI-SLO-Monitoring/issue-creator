@@ -31,7 +31,7 @@ export class CbOpenIssueCreatorComponent extends IssueCreator {
 
     // TODO: Should we include logs with same correlationId for a better stacktrace?
     const query = await this.logModel.find({
-      detector: log.detectorUrl, 
+      detectorUrl: log.detectorUrl, 
       time: { $gte: log.time - this.correspondingIssueTimeInterval } 
     });
 
@@ -44,7 +44,7 @@ export class CbOpenIssueCreatorComponent extends IssueCreator {
       }
 
       console.log("Updating Issue with Id ", query[0].issueID)
-      this.updateLastOccurrence(query[0].issueID, log.time) // TODO: ? Should we add more information to the commend besides time?
+      return this.updateLastOccurrence(query[0].issueID, log.time) // TODO: ? Should we add more information to the commend besides time?
 
     } else {
       console.log("Issue does not exist yet");
