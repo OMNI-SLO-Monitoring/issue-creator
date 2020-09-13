@@ -28,6 +28,7 @@ export class ServiceRegistrationController {
    * Receives requests to delete monitored services by id
    *
    * @param id of a registered Service
+   * @returns the service id of the deleted service
    */
   @Delete('/:id')
   deleteService(@Param('id') id: string) {
