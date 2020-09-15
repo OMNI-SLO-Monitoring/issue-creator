@@ -97,7 +97,9 @@ export class LogReceiverService implements OnModuleInit {
           log.detectorUrl.substr(0, log.detectorUrl.length - 1),
         )
       ) {
-        await this.serviceRegistration.findAndUpdate(log.detectorUrl + '/');
+        await this.serviceRegistration.findAndUpdate(
+          log.detectorUrl.substr(0, log.detectorUrl.length - 1),
+        );
         return true;
       }
     } else {
