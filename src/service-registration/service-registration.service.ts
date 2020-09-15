@@ -65,4 +65,16 @@ export class ServiceRegistrationService {
     }
     return false;
   }
+
+  /**
+   * Updates the service url of a registered service in the database
+   * to conform to the defined url format
+   * @param serviceUrl the service url of the service to be updated
+   */
+  async findAndUpdate(serviceUrl: string) {
+    this.serviceModel.update(
+      { serviceUrl: serviceUrl },
+      { $set: { serviceUrl: serviceUrl + '/' } },
+    );
+  }
 }

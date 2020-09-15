@@ -1,4 +1,9 @@
-import { Injectable, HttpService, HttpException, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  HttpService,
+  HttpException,
+  OnModuleInit,
+} from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
 import { LogType } from 'logging-format';
 import { CpuUtilizationIssueCreatorComponent } from '../issue-creator/cpu-issue-creator';
@@ -27,6 +32,7 @@ export class LogReceiverService implements OnModuleInit {
   consumer: any;
   kafka: Kafka;
   kafkaUrl: string;
+  retrievedLog: LogMessageFormat;
 
   constructor(
     private http: HttpService,
@@ -53,7 +59,7 @@ export class LogReceiverService implements OnModuleInit {
     this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(
       http,
       configService,
-      this.logModel
+      this.logModel,
     );
     this.kafkaUrl = this.configService.get<string>(
       'KAFKA_URL',
@@ -71,6 +77,46 @@ export class LogReceiverService implements OnModuleInit {
   }
 
   /**
+   * This function probes whether or not the service with the given service url is already registered.
+   * Firstly, the format of the provided url is checked and based on it, two evaluations take place. One searches
+   * in the database for the corresponding service url without the "/" and one with. If a search is successful,
+   * the service url will be altered if the "/" is missing and remains unaltered when the service url format is
+   * conformed.
+   *
+   * @param detectorUrl the provided service url with which to search the corresponding service in the database
+   * @returns true if service is registered and false otherwise
+   */
+  async evaluatingUrl(log: LogMessageFormat) {
+    if (log.detectorUrl.endsWith('/')) {
+      if (await this.serviceRegistration.checkIfRegistered(log.detectorUrl)) {
+        return true;
+      }
+
+      if (
+        await this.serviceRegistration.checkIfRegistered(
+          log.detectorUrl.substr(0, log.detectorUrl.length - 1),
+        )
+      ) {
+        await this.serviceRegistration.findAndUpdate(log.detectorUrl + '/');
+        return true;
+      }
+    } else {
+      if (await this.serviceRegistration.checkIfRegistered(log.detectorUrl)) {
+        log.detectorUrl = log.detectorUrl + '/';
+        await this.serviceRegistration.findAndUpdate(log.detectorUrl);
+        return true;
+      }
+      if (
+        await this.serviceRegistration.checkIfRegistered(log.detectorUrl + '/')
+      ) {
+        log.detectorUrl = log.detectorUrl + '/';
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Handles Log messages by delegating them to the respective IssueCreator
    *
    * @param logMessage is the log received by the log receiver controller
@@ -79,37 +125,42 @@ export class LogReceiverService implements OnModuleInit {
    *
    */
   async handleLogMessage(logMessage: LogMessageFormat) {
-    console.log("processing: ", logMessage)
+    console.log('processing: ', logMessage);
+    this.retrievedLog = logMessage;
 
     if (!logMessage?.detectorUrl) {
       throw new HttpException('LogMessage without detector Id', 406);
     }
 
-    if (!(await this.serviceRegistration.checkIfRegistered(logMessage.detectorUrl))) {
+    if (!this.evaluatingUrl(this.retrievedLog)) {
       throw new HttpException('LogMessage detector is not registered', 401);
     } else {
-      console.log("Detector is registered")
+      console.log('Detector is registered');
     }
 
     let issueID;
-    switch (logMessage.type) {
+    switch (this.retrievedLog.type) {
       case LogType.CPU:
-        issueID = await this.cpuUtilizationIssueCreator.handleLog(logMessage);
+        issueID = await this.cpuUtilizationIssueCreator.handleLog(
+          this.retrievedLog,
+        );
         break;
       case LogType.CB_OPEN:
-        issueID = await this.cbOpenIssueCreator.handleLog(logMessage);
+        issueID = await this.cbOpenIssueCreator.handleLog(this.retrievedLog);
         break;
       case LogType.ERROR:
-        issueID = await this.errorResponseIssueCreator.handleLog(logMessage);
+        issueID = await this.errorResponseIssueCreator.handleLog(
+          this.retrievedLog,
+        );
         break;
       case LogType.TIMEOUT:
-        issueID = await this.timeoutIssueCreator.handleLog(logMessage);
+        issueID = await this.timeoutIssueCreator.handleLog(this.retrievedLog);
         break;
       default:
         throw 'Not Implemented LogType';
     }
 
-    this.addLogMessageToDatabase(logMessage, issueID);
+    this.addLogMessageToDatabase(this.retrievedLog, issueID);
     return issueID;
   }
 
@@ -119,7 +170,10 @@ export class LogReceiverService implements OnModuleInit {
    * @param logMessage Log sent by the monitor
    * @returns the saved log
    */
-  async addLogMessageToDatabase(logMessage: LogMessageFormat, issueID: string): Promise<Logs> {
+  async addLogMessageToDatabase(
+    logMessage: LogMessageFormat,
+    issueID: string,
+  ): Promise<Logs> {
     const log = {
       time: logMessage.time,
       sourceUrl: logMessage.sourceUrl,
@@ -127,7 +181,7 @@ export class LogReceiverService implements OnModuleInit {
       message: logMessage.message,
       type: logMessage.type,
       data: logMessage.data,
-      issueID: issueID, 
+      issueID: issueID,
     };
     const addedLog = new this.logModel(log);
     return addedLog.save();
@@ -146,7 +200,7 @@ export class LogReceiverService implements OnModuleInit {
    * Gets all logs from a certain service from the database
    *
    * @param id id of the service that reported a log
-   * 
+   *
    * @returns array of logs where detectorUrl matches url of service corresponding to serviceId
    */
   async getLogsByServiceId(id: any) {
