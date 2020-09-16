@@ -161,6 +161,7 @@ export class LogReceiverService implements OnModuleInit {
       default:
         throw 'Not Implemented LogType';
     }
+    console.log("Saving Log: " + JSON.stringify(this.retrievedLog));
 
     this.addLogMessageToDatabase(this.retrievedLog, issueID);
     return issueID;
@@ -199,6 +200,13 @@ export class LogReceiverService implements OnModuleInit {
   }
 
   /**
+   * Deletes all logs from DB
+   */
+  async deleteAllLogs() {
+    return this.logModel.deleteMany({ time: { $gte: 0 } }).exec();
+  }
+
+  /**
    * Gets all logs from a certain service from the database
    *
    * @param id id of the service that reported a log
@@ -223,7 +231,7 @@ export class LogReceiverService implements OnModuleInit {
       eachMessage: async ({ topic, partition, message }) => {
         if (message.value != null) {
           const log: LogMessageFormat = JSON.parse(message.value.toString());
-          this.handleLogMessage(log);
+          await this.handleLogMessage(log);
         }
       },
     });
