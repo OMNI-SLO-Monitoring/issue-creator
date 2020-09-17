@@ -8,7 +8,7 @@ export class ServiceRegistrationService {
   constructor(
     @InjectModel('service') private serviceModel: Model<Service>,
     private http: HttpService,
-  ) {}
+  ) { }
 
   /**
    * Adds a service to the database
@@ -17,6 +17,9 @@ export class ServiceRegistrationService {
    * @returns Promise containing the inserted service
    */
   async addService(service: IService): Promise<Service> {
+    if (!service.serviceUrl.endsWith('/')) {
+      service.serviceUrl = service.serviceUrl + "/";
+    }
     const res = new this.serviceModel(service);
     service.id = res.id;
     return res.save();
@@ -60,7 +63,9 @@ export class ServiceRegistrationService {
    */
   async checkIfRegistered(serviceUrl: string): Promise<boolean> {
     const res = await this.serviceModel.find({ serviceUrl: serviceUrl });
-    if (res) {
+    console.log("res", res);
+
+    if (res.length > 0) {
       return true;
     }
     return false;
@@ -72,9 +77,12 @@ export class ServiceRegistrationService {
    * @param serviceUrl the service url of the service to be updated
    */
   async findAndUpdate(serviceUrl: string) {
-    this.serviceModel.update(
+    console.log("service url: " + serviceUrl);
+    const serviceUrlWithSlash = serviceUrl + '/';
+
+    await this.serviceModel.update(
       { serviceUrl: serviceUrl },
-      { $set: { serviceUrl: serviceUrl + '/' } },
+      { $set: { serviceUrl: serviceUrlWithSlash } },
     );
   }
 }

@@ -134,7 +134,7 @@ export class LogReceiverService implements OnModuleInit {
       throw new HttpException('LogMessage without detector Id', 406);
     }
 
-    if (!this.evaluatingUrl(this.retrievedLog)) {
+    if (!(await this.evaluatingUrl(this.retrievedLog))) {
       throw new HttpException('LogMessage detector is not registered', 401);
     } else {
       console.log('Detector is registered');
