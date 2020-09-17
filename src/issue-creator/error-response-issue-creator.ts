@@ -16,8 +16,8 @@ export class ErrorResponseIssueCreatorComponent extends IssueCreator {
 
   constructor(
     http: HttpService,
-    configService: ConfigService,
     private logModel: Model<Logs>,
+    configService: ConfigService,
   ) {
     super(http, configService);
   }

@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ServiceRegistrationController } from './service-registration.controller';
 import { ServiceRegistrationService } from './service-registration.service';
 import { HttpModule } from '@nestjs/common';
-import { getModelToken } from '@nestjs/mongoose';
+import { MongooseModule, getModelToken } from '@nestjs/mongoose';
+import { LogsSchema } from '../schema/logs.schema';
 import { dbServiceMock } from '../db-mock-data/database-service-mock';
 
 describe('ServiceRegistration Controller', () => {

@@ -15,6 +15,8 @@ export class ServiceRegistrationService {
    * Adds a service to the database
    *
    * @param monitoringSelectionDTO Service to be monitored
+   * 
+   * @returns added service
    */
   async addService(service: IService): Promise<Service> {
     const res = new this.serviceModel(service);
@@ -27,9 +29,14 @@ export class ServiceRegistrationService {
    *
    * @param id Id of service
    *
+   * @return true if was deleted and false if not
    */
-  deleteService(id: string) {
-    return this.serviceModel.findByIdAndDelete(id);
+  async deleteService(id: string): Promise<boolean> {
+    try {
+      const res = await this.serviceModel.findByIdAndDelete(id);
+    } catch {
+      return true;
+    }
   }
 
   /**
@@ -41,10 +48,24 @@ export class ServiceRegistrationService {
     return this.serviceModel.find({}).exec();
   }
 
+  /**
+   * finds a service by a given id
+   * 
+   * @param id of a service
+   * 
+   * @returns service with the given id
+   */
   async getService(id: string): Promise<Service> {
     return await this.serviceModel.findById(id);
   }
 
+  /**
+   * checks if a service url is registered
+   * 
+   * @param serviceUrl that should be checked
+   * 
+   * @returns true if registered and false if not
+   */
   async checkIfRegistered(serviceUrl: string): Promise<boolean> {
     const res = await this.serviceModel.find({ serviceUrl: serviceUrl });
     if (res) {

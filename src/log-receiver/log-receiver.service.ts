@@ -52,8 +52,8 @@ export class LogReceiverService implements OnModuleInit {
     );
     this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(
       http,
+      this.logModel,
       configService,
-      this.logModel
     );
     this.kafkaUrl = this.configService.get<string>(
       'KAFKA_URL',
