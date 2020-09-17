@@ -4,7 +4,6 @@ import { IssueCreator } from './issue-creator';
 import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
 import { Logs } from 'src/schema/logs.schema';
-import { time } from 'console';
 
 /**
  * ErrorResponseIssueComponent handles ErrorResponse Logs, it extends the IssueCreator to enable individual issue creation for error response issues 

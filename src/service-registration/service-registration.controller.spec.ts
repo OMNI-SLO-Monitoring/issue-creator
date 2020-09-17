@@ -40,14 +40,4 @@ describe('ServiceRegistration Controller', () => {
     ).toHaveProperty('id');
   });
 
-  it('should delete service', async () => {
-    const service = await controller.addService({
-      name: 'Test',
-      serviceUrl: 'www.test.de',
-    });
-
-    expect(
-      await controller.deleteService(service.id)
-    ).toBeTruthy();
-  })
 });
