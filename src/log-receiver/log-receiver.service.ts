@@ -91,7 +91,6 @@ export class LogReceiverService implements OnModuleInit {
       if (await this.serviceRegistration.checkIfRegistered(log.detectorUrl)) {
         return true;
       }
-
       if (
         await this.serviceRegistration.checkIfRegistered(
           log.detectorUrl.substr(0, log.detectorUrl.length - 1),
@@ -200,7 +199,9 @@ export class LogReceiverService implements OnModuleInit {
   }
 
   /**
-   * Deletes all logs from DB
+   * Deletes all logs from DB.
+   * 
+   * @returns LogModel object whether it was successful  and  how many entries were deleted. 
    */
   async deleteAllLogs() {
     return this.logModel.deleteMany({ time: { $gte: 0 } }).exec();

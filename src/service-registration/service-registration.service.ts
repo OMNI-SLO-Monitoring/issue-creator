@@ -11,10 +11,11 @@ export class ServiceRegistrationService {
   ) { }
 
   /**
-   * Adds a service to the database
+   * Adds a service to the database. 
+   * If the service does not end with '/' one is appended.
    *
-   * @param monitoringSelectionDTO Service to be monitored
-   * @returns Promise containing the inserted service
+   * @param monitoringSelectionDTO Service to be monitored.
+   * @returns Promise containing the inserted service.
    */
   async addService(service: IService): Promise<Service> {
     if (!service.serviceUrl.endsWith('/')) {
@@ -63,7 +64,6 @@ export class ServiceRegistrationService {
    */
   async checkIfRegistered(serviceUrl: string): Promise<boolean> {
     const res = await this.serviceModel.find({ serviceUrl: serviceUrl });
-    console.log("res", res);
 
     if (res.length > 0) {
       return true;
@@ -76,8 +76,7 @@ export class ServiceRegistrationService {
    * to conform to the defined url format
    * @param serviceUrl the service url of the service to be updated
    */
-  async findAndUpdate(serviceUrl: string) {
-    console.log("service url: " + serviceUrl);
+  async findAndUpdate(serviceUrl: string) {    
     const serviceUrlWithSlash = serviceUrl + '/';
 
     await this.serviceModel.update(

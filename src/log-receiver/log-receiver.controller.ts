@@ -39,9 +39,9 @@ export class LogReceiverController {
   }
 
   /**
-   * Returns all logs in the database
+   * Deletes all logs in the database.
    * 
-   * @returns all logs from the database
+   * @returns Promise with LogModel object whether it was successful  and  how many entries were deleted.
    */
   @Get('/:id/delete-all')
   async deleteAllLogs() {
