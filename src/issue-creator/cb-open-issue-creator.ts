@@ -31,26 +31,25 @@ export class CbOpenIssueCreatorComponent extends IssueCreator {
 
     // TODO: Should we include logs with same correlationId for a better stacktrace?
     const query = await this.logModel.find({
-      detectorUrl: log.detectorUrl, 
-      time: { $gte: log.time - this.correspondingIssueTimeInterval } 
+      detectorUrl: log.detectorUrl,
+      time: { $gte: log.time - this.correspondingIssueTimeInterval }
     });
 
     const relatedLog = query.find((log) => log.issueID)
 
     if (relatedLog) {
 
-      if (relatedLog.issueID) {
+      if (!relatedLog.issueID) {
         // Issue already exists but latest log doesn't have a IssueId, this should not happen but if it does we create a new issue anyways
         console.log("WARNING: Log does not have a IssueId")
-        return this.createIssueFromLog(log);
+        return await this.createIssueFromLog(log);
       }
-
       console.log("Updating Issue with Id ")
-      return this.updateLastOccurrence(relatedLog.issueID, log.time) // TODO: ? Should we add more information to the commend besides time?
+      return await this.updateLastOccurrence(relatedLog.issueID, log.time) // TODO: ? Should we add more information to the commend besides time?
 
     } else {
       console.log("Issue does not exist yet");
-      return this.createIssueFromLog(log);
+      return await this.createIssueFromLog(log);
     }
   }
 }

@@ -37,4 +37,14 @@ export class LogReceiverController {
   async getLogsByServiceId(@Param('id') id : string) {
     return this.logRcvService.getLogsByServiceId(id);
   }
+
+  /**
+   * Deletes all logs in the database.
+   * 
+   * @returns Promise with LogModel object whether it was successful  and  how many entries were deleted.
+   */
+  @Get('/:id/delete-all')
+  async deleteAllLogs() {
+    return this.logRcvService.deleteAllLogs();
+  }
 }

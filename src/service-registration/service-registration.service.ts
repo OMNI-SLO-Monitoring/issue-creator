@@ -5,20 +5,23 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class ServiceRegistrationService {
-
   constructor(
     @InjectModel('service') private serviceModel: Model<Service>,
     private http: HttpService,
-  ) {}
+  ) { }
 
   /**
-   * Adds a service to the database
+   * Adds a service to the database. 
+   * If the service does not end with '/' one is appended.
    *
-   * @param monitoringSelectionDTO Service to be monitored
+   * @param monitoringSelectionDTO Service to be monitored.
    * 
-   * @returns added service
+   * @returns Promise containing the inserted service.
    */
   async addService(service: IService): Promise<Service> {
+    if (!service.serviceUrl.endsWith('/')) {
+      service.serviceUrl = service.serviceUrl + "/";
+    }
     const res = new this.serviceModel(service);
     service.id = res.id;
     return res.save();
@@ -60,7 +63,8 @@ export class ServiceRegistrationService {
   }
 
   /**
-   * checks if a service url is registered
+   * Checks if the service is already registered or not by searching in the database
+   * for the matching service url
    * 
    * @param serviceUrl that should be checked
    * 
@@ -68,9 +72,24 @@ export class ServiceRegistrationService {
    */
   async checkIfRegistered(serviceUrl: string): Promise<boolean> {
     const res = await this.serviceModel.find({ serviceUrl: serviceUrl });
-    if (res) {
+
+    if (res.length > 0) {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Updates the service url of a registered service in the database
+   * to conform to the defined url format
+   * @param serviceUrl the service url of the service to be updated
+   */
+  async findAndUpdate(serviceUrl: string) {    
+    const serviceUrlWithSlash = serviceUrl + '/';
+
+    await this.serviceModel.update(
+      { serviceUrl: serviceUrl },
+      { $set: { serviceUrl: serviceUrlWithSlash } },
+    );
   }
 }
