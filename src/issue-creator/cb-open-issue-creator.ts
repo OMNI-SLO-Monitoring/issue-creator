@@ -1,14 +1,14 @@
 import { HttpService } from '@nestjs/common';
 import { LogMessageFormat, LogType } from 'logging-format';
-import { IssueCreator } from './issue-creator'
+import { IssueCreator } from './issue-creator';
 import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
 import { Logs } from 'src/schema/logs.schema';
 
 /**
- * TimeoutIssueComponent handles Timeout Logs, it extends IssueCreator to enable individual issue creation for timeout issues
+ * CbOpenIssueComponent handles CB open Logs, it extends IssueCreator to enable individual issue creation for cb open issues 
  */
-export class TimeoutIssueCreatorComponent extends IssueCreator {
+export class CbOpenIssueCreatorComponent extends IssueCreator {
 
   /** If there is an existing log that arrived within this time interval, an incoming issue belongs to the same issue as the existing log  */
   correspondingIssueTimeInterval: number = 1000 * 60 * 60; // 1 h
@@ -21,13 +21,13 @@ export class TimeoutIssueCreatorComponent extends IssueCreator {
   }
 
   /**
-   * handles timeout logs by creating or updating an Issue and sending it to the API: https://github.com/ccims/ccims-backend/tree/apiMockup
-   *
-   * @param log received log in the LogMessageFormat
+   * handles cb open logs by creating or updating an Issue and sending it to the API: https://github.com/ccims/ccims-backend/tree/apiMockup
+   * 
+   * @param log received log 
    * @returns the issue ID received from the backend
    */
   async handleLog(log: LogMessageFormat) {
-    if (log.type != LogType.TIMEOUT) throw 'Wrong LogType';
+    if (log.type != LogType.CB_OPEN) throw 'Wrong LogType';
 
     // TODO: Should we include logs with same correlationId for a better stacktrace?
     const query = await this.logModel.find({
@@ -39,7 +39,7 @@ export class TimeoutIssueCreatorComponent extends IssueCreator {
 
     if (relatedLog) {
 
-      if (!relatedLog.issueID) {
+      if (relatedLog.issueID) {
         // Issue already exists but latest log doesn't have a IssueId, this should not happen but if it does we create a new issue anyways
         console.log("WARNING: Log does not have a IssueId")
         return this.createIssueFromLog(log);
@@ -53,5 +53,4 @@ export class TimeoutIssueCreatorComponent extends IssueCreator {
       return this.createIssueFromLog(log);
     }
   }
-
 }
