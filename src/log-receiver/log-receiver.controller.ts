@@ -12,7 +12,9 @@ export class LogReceiverController {
 
   /**
    * Logs are received here and handled accordingly
+   * 
    * @param logMessage is the log that is sent by the monitors and received here
+   * @returns issueID that was received from the backend
    */
   @Post()
   @Header('Content-Type', 'application/json')
@@ -32,6 +34,8 @@ export class LogReceiverController {
 
   /**
    * Returns all logs from one specific service identified by id
+   * 
+   * @returns all logs from one specific service identified by id
    */
   @Get('/:id')
   async getLogsByServiceId(@Param('id') id : string) {

@@ -237,4 +237,8 @@ export class LogReceiverService implements OnModuleInit {
       },
     });
   }
+
+  async stopConsuming() {
+    await this.consumer.disconnect();
+  }
 }
