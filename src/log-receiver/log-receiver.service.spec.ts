@@ -37,7 +37,7 @@ describe('LogReceiverService', () => {
   });
 
   /**
-   * Test function that probes if valid logs are added to database and
+   * Test function that probes if valid logs of type CB_OPNE are added to database and
    * returned. In this case the test should be successful.
    */
   it('should add log message to database successfully', async () => {
@@ -50,6 +50,72 @@ describe('LogReceiverService', () => {
       data: {
         failedResponses: 31,
         openTime: 10,
+      },
+      // issueID: '1',
+    };
+    jest
+      .spyOn(service.cbOpenIssueCreator, 'handleLog')
+      .mockImplementation(() => Promise.resolve('1'));
+    expect(await service.addLogMessageToDatabase(logMock, '1')).toBeDefined();
+  });
+
+  /**
+ * Test function that probes if valid logs of type TIMEOUT are added to database and
+ * returned. In this case the test should be successful.
+ */
+  it('should add log message to database successfully', async () => {
+    const logMock = {
+      type: LogType.TIMEOUT,
+      time: Date.now(),
+      sourceUrl: 'Database Service',
+      detectorUrl: '1',
+      message: 'Error',
+      data: {
+        timeoutDuration : 1000
+      },
+      // issueID: '1',
+    };
+    jest
+      .spyOn(service.cbOpenIssueCreator, 'handleLog')
+      .mockImplementation(() => Promise.resolve('1'));
+    expect(await service.addLogMessageToDatabase(logMock, '1')).toBeDefined();
+  });
+
+  /**
+  * Test function that probes if valid logs of type CPU are added to database and
+  * returned. In this case the test should be successful.
+  */
+  it('should add log message to database successfully', async () => {
+    const logMock = {
+      type: LogType.CPU,
+      time: Date.now(),
+      sourceUrl: 'Database Service',
+      detectorUrl: '1',
+      message: 'Error',
+      data: {
+        cpuUtilization: 75
+      },
+      // issueID: '1',
+    };
+    jest
+      .spyOn(service.cbOpenIssueCreator, 'handleLog')
+      .mockImplementation(() => Promise.resolve('1'));
+    expect(await service.addLogMessageToDatabase(logMock, '1')).toBeDefined();
+  });
+  /**
+   * Test function that probes if valid logs of type ERROR are added to database and
+   * returned. In this case the test should be successful.
+   */
+  it('should add log message to database successfully', async () => {
+    const logMock = {
+      type: LogType.ERROR,
+      time: Date.now(),
+      sourceUrl: 'Database Service',
+      detectorUrl: '1',
+      message: 'Error',
+      data: {
+        expected: 'nice',
+        actual: 'not nice'
       },
       // issueID: '1',
     };
