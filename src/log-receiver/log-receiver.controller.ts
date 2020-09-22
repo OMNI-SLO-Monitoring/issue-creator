@@ -7,21 +7,25 @@ import { LogMessageFormat } from 'logging-format';
  */
 @Controller()
 export class LogReceiverController {
+  
   constructor(private logRcvService: LogReceiverService) {}
+
   /**
-   * Logs are received here and handled depending on the log type e.g. CPU, Error etc.
+   * Logs are received here and handled accordingly
    * 
    * @param logMessage is the log that is sent by the monitors and received here
+   * @returns issueID that was received from the backend
    */
   @Post()
   @Header('Content-Type', 'application/json')
   receiveLog(@Body() logMessage: LogMessageFormat) {
-    this.logRcvService.handleLogMessage(logMessage);
-    this.logRcvService.addLogMessageToDatabase(logMessage);
-    console.log('Received!');
+    return this.logRcvService.handleLogMessage(logMessage);
   }
+
   /**
    * Returns all logs in the database
+   * 
+   * @returns all logs from the database
    */
   @Get()
   getAllLogs() {
@@ -30,9 +34,21 @@ export class LogReceiverController {
 
   /**
    * Returns all logs from one specific service identified by id
+   * 
+   * @returns all logs from one specific service identified by id
    */
   @Get('/:id')
-  getLogsByServiceId(@Param('id') id : string) {
+  async getLogsByServiceId(@Param('id') id : string) {
     return this.logRcvService.getLogsByServiceId(id);
+  }
+
+  /**
+   * Deletes all logs in the database.
+   * 
+   * @returns Promise with LogModel object whether it was successful  and  how many entries were deleted.
+   */
+  @Get('/:id/delete-all')
+  async deleteAllLogs() {
+    return this.logRcvService.deleteAllLogs();
   }
 }

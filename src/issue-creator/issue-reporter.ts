@@ -1,25 +1,77 @@
-import { HttpService } from "@nestjs/common"
+import { HttpService } from '@nestjs/common';
+import { request, gql } from 'graphql-request';
+import { IssueFormat } from '../IssueFormat';
+import { ConfigService } from '@nestjs/config';
 
-/*
-  Provides the basic funtionality every "detailed" IssueComponent should have
-*/
+/**
+ * Provides the basic functionality every "detailed" IssueCreator should have
+ */
 export abstract class IssueReporter {
+  api = this.configService.get<string>('BACKEND_API');
 
-    private api = "http://localhost:6969"  // TODO: What API Address
+  constructor(
+    private readonly http: HttpService,
+    private readonly configService: ConfigService,
+  ) { }
 
-    constructor(private http: HttpService) { }
-
-    /**
-      Takes an @param issue and sends Issues to the (not yet implemented) api.
-      Can be called in every Component that extends IssueComponent
-    */
-    // TODO: Create Issue Format (Interface)
-    reportIssue(issue: any) {
-        console.log("Reporting Issue")
-        // TODO: Where/What to send to API
-        this.http.post(this.api, issue).subscribe(
-            res => console.log("Issue Report Successful!"),
-            err => console.log("Error at reporting issue")
-        )
+  /**
+   * sends Issues to the current MockApi (https://github.com/ccims/ccims-backend/tree/apiMockup)
+   * and receives the Issue ID from it if the request was successful.
+   *
+   * @param issue issue to be send
+   * @returns the issueID received when the the request was accepted by the server
+   */
+  async reportIssue(issue: IssueFormat) {
+    const inputData = { input: issue };
+    const queryIssue = gql`
+      mutation createIssue($input: CreateIssueInput!) {
+        createIssue(input: $input) {
+          issue {
+            id
+          }
+        }
+      }
+    `;
+    try {
+      const data = await request(`${this.api}`, queryIssue, inputData);
+      const issueID = data.createIssue.issue.id;
+      console.log("CREATED ISSUE", issueID);
+      return issueID;
+    } catch (error) {
+      console.error("Error creating issue", error);
     }
+  }
+
+  /**
+   * Updates a last occurrence of an Issue by adding a comment to the existing Issue.
+   * 
+   * @param issueID the Issue where to add the comment.
+   * @param lastOccurrence the last time the Issue occurred.
+   * @returns the issueID received when the the request was accepted by the server
+   */
+  async updateLastOccurrence(issueID: string, lastOccurrence: number) {
+    const lastOccurrenceString: string = "Last occurrence at" + new Date(lastOccurrence)
+    const inputData = {
+      input: {
+        "issueID": issueID,
+        "body": 'Last occurred' + lastOccurrence
+      }
+    };
+    const queryIssue = gql`
+      mutation addIssueComment($input: AddIssueCommentInput!) { 
+        addIssueComment (input: $input) {
+            comment {
+              id
+            }
+        }
+      }      
+    `;
+    try {
+      const data = await request(`${this.api}`, queryIssue, inputData);
+      console.log(JSON.stringify(data, undefined, 2));      
+      return issueID;
+    } catch (error) {
+      console.error(JSON.stringify(error, undefined, 2));
+    }
+  }
 }

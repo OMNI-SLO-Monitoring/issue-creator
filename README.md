@@ -1,10 +1,6 @@
-## issue-creator
+## Issue Creator
 
-- Recieves logs (from logging [logging-module](https://github.com/ccims/logging-module)).
-
-- Handles logs different depending on type of log
-- Saves the logs to a mongodb
-- Creates Issue and reports to API
+The Issue Creator retrieves logs from the Kafka Queue described in and instantiated with the Error-Response Monitor. Based on the services that have been registered and thus saved in a service database with the Monitoring Service Selection View in the Monitoring Frontend, the Issue Creator will either accept the retrieved log, convert it into an issue and dispatch it to Sandro's API if it pertains to a registered service or ignore the log otherwise. The log with the corresponding issue id received from Sandro's API will then be saved in a log database.
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
@@ -46,7 +42,14 @@ $ docker-compose build
 ```bash
 $ docker-compose up
 ```
-
+#### Start the database only:
+```bash
+$ docker run -d -p 27017:27017 mongo
+```
+#### If the database is running you can use:
+```bash 
+$ npm run start
+```
 ## Usage
 
 ```bash
