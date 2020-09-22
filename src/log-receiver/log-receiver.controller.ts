@@ -37,7 +37,7 @@ export class LogReceiverController {
    * 
    * @returns all logs from one specific service identified by id
    */
-  @Post('/:id')
+  @Get('/:id')
   async getLogsByServiceId(@Param('id') id : string) {
     return this.logRcvService.getLogsByServiceId(id);
   }
