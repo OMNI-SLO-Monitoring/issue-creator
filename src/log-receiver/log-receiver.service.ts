@@ -91,22 +91,7 @@ export class LogReceiverService implements OnModuleInit {
       if (await this.serviceRegistration.checkIfRegistered(log.detectorUrl)) {
         return true;
       }
-      if (
-        await this.serviceRegistration.checkIfRegistered(
-          log.detectorUrl.substr(0, log.detectorUrl.length - 1),
-        )
-      ) {
-        await this.serviceRegistration.findAndUpdate(
-          log.detectorUrl.substr(0, log.detectorUrl.length - 1),
-        );
-        return true;
-      }
     } else {
-      if (await this.serviceRegistration.checkIfRegistered(log.detectorUrl)) {
-        log.detectorUrl = log.detectorUrl + '/';
-        await this.serviceRegistration.findAndUpdate(log.detectorUrl);
-        return true;
-      }
       if (
         await this.serviceRegistration.checkIfRegistered(log.detectorUrl + '/')
       ) {
