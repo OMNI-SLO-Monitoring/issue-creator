@@ -63,7 +63,7 @@ export class LogReceiverService implements OnModuleInit {
     );
     this.kafkaUrl = this.configService.get<string>(
       'KAFKA_URL',
-      'localhost:9092',
+      '1.1.1.1:9092',
     );
     (this.kafka = new Kafka({
       clientId: 'issue-creator',
