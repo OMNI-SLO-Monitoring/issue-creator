@@ -8,6 +8,8 @@ import { ServiceRegistrationService } from './service-registration/service-regis
 import { ServiceSchema } from './schema/service.schema';
 import { ConfigModule } from '@nestjs/config';
 import { GenericIssueCreatorSchema } from './schema/generic-issue-creator.schema';
+import { GenericIssueCreatorController } from './generic-issue-creator/generic-issue-creator.controller';
+import { GenericIssueCreatorService } from './generic-issue-creator/generic-issue-creator.service';
 
 @Module({
   imports: [
@@ -23,11 +25,13 @@ import { GenericIssueCreatorSchema } from './schema/generic-issue-creator.schema
   ],
   controllers: [
     LogReceiverController,
-    ServiceRegistrationController
+    ServiceRegistrationController,
+    GenericIssueCreatorController
   ],
   providers: [
     LogReceiverService,
-    ServiceRegistrationService
+    ServiceRegistrationService,
+    GenericIssueCreatorService
   ],
 })
 export class AppModule {}

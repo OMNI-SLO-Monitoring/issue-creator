@@ -16,6 +16,7 @@ import { Model } from 'mongoose';
 import { Logs } from 'src/schema/logs.schema';
 import { ConfigService } from '@nestjs/config';
 import { Kafka } from 'kafkajs';
+import { GenericIssueCreatorService } from 'src/generic-issue-creator/generic-issue-creator.service';
 
 /**
  * This service handles the log message passed down from the controller
@@ -39,6 +40,7 @@ export class LogReceiverService implements OnModuleInit {
     private configService: ConfigService,
     @InjectModel('logs') private logModel: Model<Logs>,
     private serviceRegistration: ServiceRegistrationService,
+    private genericIssueCreatorService: GenericIssueCreatorService
   ) {
     // Create an Issue Creator for each LogType
     this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(
@@ -160,9 +162,11 @@ export class LogReceiverService implements OnModuleInit {
       default:
         throw 'Not Implemented LogType';
     }
-    console.log("Saving Log: " + JSON.stringify(this.retrievedLog));
 
-    this.addLogMessageToDatabase(this.retrievedLog, issueID);
+    const res = await this.addLogMessageToDatabase(this.retrievedLog, issueID);
+
+    this.genericIssueCreatorService.handleLog(res);
+
     return issueID;
   }
 
