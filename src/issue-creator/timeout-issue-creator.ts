@@ -29,28 +29,11 @@ export class TimeoutIssueCreatorComponent extends IssueCreator {
   async handleLog(log: LogMessageFormat) {
     if (log.type != LogType.TIMEOUT) throw 'Wrong LogType';
 
-    // TODO: Should we include logs with same correlationId for a better stacktrace?
     const query = await this.logModel.find({
       detectorUrl: log.detectorUrl,
       time: { $gte: log.time - this.correspondingIssueTimeInterval }
     });
-
-    const relatedLog = query.find((log) => log.issueID)
-
-    if (relatedLog) {
-
-      if (!relatedLog.issueID) {
-        // Issue already exists but latest log doesn't have a IssueId, this should not happen but if it does we create a new issue anyways
-        console.log("WARNING: Log does not have a IssueId")
-        return await this.createIssueFromLog(log);
-      }
-      console.log("Updating Issue with Id ")
-      return await this.updateLastOccurrence(relatedLog.issueID, log.time) // TODO: ? Should we add more information to the commend besides time?
-
-    } else {
-      console.log("Issue does not exist yet");
-      return await this.createIssueFromLog(log);
-    }
+    return this.checkIssueID(query, log);
   }
 
 }

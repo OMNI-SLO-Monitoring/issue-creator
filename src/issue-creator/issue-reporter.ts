@@ -42,6 +42,7 @@ export abstract class IssueReporter {
     }
   }
 
+
   /**
    * Updates a last occurrence of an Issue by adding a comment to the existing Issue.
    * 
@@ -50,10 +51,11 @@ export abstract class IssueReporter {
    * @returns the issueID received when the the request was accepted by the server
    */
   async updateLastOccurrence(issueID: string, lastOccurrence: number) {
-    const lastOccurrenceString: string = "Last occurrence at" + new Date(lastOccurrence)
+    console.log(issueID);
+    const lastOccurrenceString: string = "Last occurrence at " + new Date(lastOccurrence)
     const inputData = {
       input: {
-        "issueID": issueID,
+        "issue": issueID,
         "body": 'Last occurred' + lastOccurrence
       }
     };

@@ -28,30 +28,10 @@ export class ErrorResponseIssueCreatorComponent extends IssueCreator {
    */
   async handleLog(log: LogMessageFormat) {
     if (log.type != LogType.ERROR) throw 'Wrong LogType';
-
-    // TODO: Should we include logs with same correlationId for a better stacktrace?
-    // TODO: Should we use expected/result as a criterial for when logs belong to an existing issue?
     const query = await this.logModel.find({
       detectorUrl: log.detectorUrl,
       time: { $gte: log.time - this.correspondingIssueTimeInterval },
     });
-
-    const relatedLog = query.find(log => log.issueID);
-
-    if (relatedLog) {
-      console.log('FOUND', relatedLog);
-
-      if (!relatedLog.issueID) {
-        // Issue already exists but latest log doesn't have a IssueId, this should not happen but if it does we create a new issue anyways
-        console.log('WARNING: Log does not have a IssueId');
-        return await this.createIssueFromLog(log);
-      }
-      console.log('Updating Issue with Id');
-      return  await this.updateLastOccurrence(relatedLog.issueID, log.time); // TODO: ? Should we add more information to the comment besides time?
-      
-    } else {
-      console.log('Issue does not exist yet');
-      return await this.createIssueFromLog(log);
-    }
+    return this.checkIssueID(query, log);
   }
 }
