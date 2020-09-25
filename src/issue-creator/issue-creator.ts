@@ -1,5 +1,4 @@
 import { IssueReporter } from './issue-reporter';
-import { HttpService } from '@nestjs/common';
 import { LogMessageFormat } from 'logging-format';
 import { IssueFormat } from '../IssueFormat';
 import { ConfigService } from '@nestjs/config';
@@ -10,8 +9,8 @@ import { Logs } from 'src/schema/logs.schema';
  */
 export abstract class IssueCreator extends IssueReporter {
 
-  constructor(http: HttpService, configService: ConfigService) {
-    super(http, configService);
+  constructor(configService: ConfigService) {
+    super(configService);
   }
 
   /**
@@ -22,8 +21,8 @@ export abstract class IssueCreator extends IssueReporter {
    */
   async createIssueFromLog(log: LogMessageFormat) {
     const issue: IssueFormat = {
-      title: `${log.type} + Error`,
-      body: `${log.data}`,
+      title: `${log.type} + Error at ${log.sourceUrl}` ,
+      body: JSON.stringify(log.data),
       category: 'BUG',
       componentIDs: [`5d31793fbdabf003`],
       startDate: log.time,

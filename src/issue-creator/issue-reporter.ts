@@ -1,4 +1,3 @@
-import { HttpService } from '@nestjs/common';
 import { request, gql } from 'graphql-request';
 import { IssueFormat } from '../IssueFormat';
 import { ConfigService } from '@nestjs/config';
@@ -10,7 +9,6 @@ export abstract class IssueReporter {
   api = this.configService.get<string>('BACKEND_API');
 
   constructor(
-    private readonly http: HttpService,
     private readonly configService: ConfigService,
   ) { }
 

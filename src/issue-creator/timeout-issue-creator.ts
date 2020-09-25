@@ -1,4 +1,3 @@
-import { HttpService } from '@nestjs/common';
 import { LogMessageFormat, LogType } from 'logging-format';
 import { IssueCreator } from './issue-creator'
 import { ConfigService } from '@nestjs/config';
@@ -14,10 +13,9 @@ export class TimeoutIssueCreatorComponent extends IssueCreator {
   correspondingIssueTimeInterval: number = 1000 * 60 * 60; // 1 h
 
   constructor(
-    http: HttpService,
     private logModel: Model<Logs>,
     configService: ConfigService) {
-    super(http, configService);
+    super(configService);
   }
 
   /**
@@ -27,8 +25,8 @@ export class TimeoutIssueCreatorComponent extends IssueCreator {
    * @returns the issue ID received from the backend
    */
   async handleLog(log: LogMessageFormat) {
-    if (log.type != LogType.TIMEOUT) throw 'Wrong LogType';
-
+    if (log.type != LogType.TIMEOUT) throw new Error('Wrong LogType');
+    
     const query = await this.logModel.find({
       detectorUrl: log.detectorUrl,
       time: { $gte: log.time - this.correspondingIssueTimeInterval }
