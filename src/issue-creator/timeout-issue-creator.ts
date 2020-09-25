@@ -26,12 +26,12 @@ export class TimeoutIssueCreatorComponent extends IssueCreator {
    */
   async handleLog(log: LogMessageFormat) {
     if (log.type != LogType.TIMEOUT) throw new Error('Wrong LogType');
-    
+
     const query = await this.logModel.find({
       detectorUrl: log.detectorUrl,
       time: { $gte: log.time - this.correspondingIssueTimeInterval }
     });
-    return this.checkIssueID(query, log);
+    return this.checkForIssueID(query, log);
   }
 
 }

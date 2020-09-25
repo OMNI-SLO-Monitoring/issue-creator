@@ -19,18 +19,18 @@ export class ErrorResponseIssueCreatorComponent extends IssueCreator {
   }
 
   /**
-   * handles error response logs by creating or updating an Issue and sending it to the API: https://github.com/ccims/ccims-backend/tree/apiMockup
+   * handles error response logs by creating or updating an Issue and sending it to the API: https://github.com/ccims/ccims-backend-gql
    *
    * @param log received log in the LogMessageFormat
    * @returns the issue ID received from the backend
    */
   async handleLog(log: LogMessageFormat) {
     if (log.type != LogType.ERROR) throw new Error('Wrong LogType');
-    
+
     const query = await this.logModel.find({
       detectorUrl: log.detectorUrl,
       time: { $gte: log.time - this.correspondingIssueTimeInterval },
     });
-    return this.checkIssueID(query, log);
+    return this.checkForIssueID(query, log);
   }
 }

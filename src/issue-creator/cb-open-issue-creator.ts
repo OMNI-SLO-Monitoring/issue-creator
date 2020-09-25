@@ -31,6 +31,6 @@ export class CbOpenIssueCreatorComponent extends IssueCreator {
       detectorUrl: log.detectorUrl,
       time: { $gte: log.time - this.correspondingIssueTimeInterval }
     });
-    return this.checkIssueID(query, log);
+    return this.checkForIssueID(query, log);
   }
 }

@@ -32,6 +32,6 @@ export class CpuUtilizationIssueCreatorComponent extends IssueCreator {
       time: { $gte: log.time - this.correspondingIssueTimeInterval } 
     });
 
-    return this.checkIssueID(query, log);
+    return this.checkForIssueID(query, log);
   }
 }

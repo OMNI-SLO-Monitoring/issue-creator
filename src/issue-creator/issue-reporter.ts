@@ -3,7 +3,7 @@ import { IssueFormat } from '../IssueFormat';
 import { ConfigService } from '@nestjs/config';
 
 /**
- * Provides the basic functionality every "detailed" IssueCreator should have
+ * Provides the basic functionality to report Issues to the API https://github.com/ccims/ccims-backend-gql should have and to add comments to them
  */
 export abstract class IssueReporter {
   api = this.configService.get<string>('BACKEND_API');
@@ -13,7 +13,7 @@ export abstract class IssueReporter {
   ) { }
 
   /**
-   * sends Issues to the current MockApi (https://github.com/ccims/ccims-backend/tree/apiMockup)
+   * sends Issues to the current Backend (https://github.com/ccims/ccims-backend-gql)
    * and receives the Issue ID from it if the request was successful.
    *
    * @param issue issue to be send
