@@ -15,6 +15,7 @@ import { Model } from 'mongoose';
 import { Logs } from 'src/schema/logs.schema';
 import { ConfigService } from '@nestjs/config';
 import { Kafka } from 'kafkajs';
+import { request } from 'graphql-request';
 
 /**
  * This service handles the log message passed down from the controller
@@ -31,6 +32,7 @@ export class LogReceiverService implements OnModuleInit {
   consumer: any;
   kafka: Kafka;
   kafkaUrl: string;
+  api = this.configService.get<string>('BACKEND_API');
 
   constructor(
     private configService: ConfigService,
@@ -43,7 +45,7 @@ export class LogReceiverService implements OnModuleInit {
   /**
    * Create an Issue Creator for each LogType
    */
-  initIssueCreators(){
+  initIssueCreators() {
     this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(
       this.logModel,
       this.configService,
@@ -64,7 +66,7 @@ export class LogReceiverService implements OnModuleInit {
   /**
    * Initiating the Kafka queue 
    */
-  initKafka(){
+  initKafka() {
     this.kafkaUrl = this.configService.get<string>(
       'KAFKA_URL',
       'localhost:9092',
@@ -106,14 +108,14 @@ export class LogReceiverService implements OnModuleInit {
     return false;
   }
 
-/**
-   * Handles Log messages and saves the Log in the database with the Issue Id
-   * checks if the Detector is registered or whether the LogMessage has a detector Id
-   *
-   * @param log is the log received by the log receiver controller
-   * @returns issueID that was received from the backend
-   *
-   */
+  /**
+     * Handles Log messages and saves the Log in the database with the Issue Id
+     * checks if the Detector is registered or whether the LogMessage has a detector Id
+     *
+     * @param log is the log received by the log receiver controller
+     * @returns issueID that was received from the backend
+     *
+     */
   async handleLogMessage(logMessage: LogMessageFormat) {
     console.log('processing: ', logMessage);
     let issueID: string;
@@ -140,7 +142,7 @@ export class LogReceiverService implements OnModuleInit {
    * This calls the handleLog of the corresponding IssueCreator and passed the log message
    *
    */
-  async chooseIssueCreator(logMessage: LogMessageFormat){
+  async chooseIssueCreator(logMessage: LogMessageFormat) {
     let issueID: string;
     switch (logMessage.type) {
       case LogType.CPU:
@@ -234,5 +236,25 @@ export class LogReceiverService implements OnModuleInit {
 
   async stopConsuming() {
     await this.consumer.disconnect();
+  }
+  /**
+   * sends an issue id to the Backend API to request the corresponding issue 
+   * 
+   * @param issueID of an issue
+   * @returns the issue corresponding to the issue id
+   */
+  async getIssueFromID(issueID: string) {
+    const queryIssue = `
+      query getIssue{
+        node (id : "${issueID}"){...on Issue{id, title, body, category, isOpen}
+        }
+      }
+      `;
+    try {
+      const data = await request(`${this.api}`, queryIssue);
+      return data.node;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

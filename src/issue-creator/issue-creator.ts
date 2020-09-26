@@ -19,13 +19,14 @@ export abstract class IssueCreator extends IssueReporter {
    * @param log received log
    * @returns the issue ID received from the backend
    */
-  async createIssueFromLog(log: LogMessageFormat) {
+  async createIssueFromLog(log: LogMessageFormat): Promise<string> {
+    let date = new Date(log.time);
     const issue: IssueFormat = {
-      title: `${log.type} + Error at ${log.sourceUrl}` ,
+      title: `${log.type} at ${log.sourceUrl}`,
       body: JSON.stringify(log.data),
       category: 'BUG',
-      componentIDs: [`5d31793fbdabf003`],
-      startDate: log.time,
+      componentIDs: [`5d31cb4c619df003`],
+      startDate: date,
       clientMutationID: 'Error-Monitoring',
     };
     return this.reportIssue(issue);
@@ -39,7 +40,7 @@ export abstract class IssueCreator extends IssueReporter {
    * @param log received log in the LogMessageFormat
    * @returns the Issue ID either from the database or it receives one from the backend
    */
-  async checkForIssueID(query: Logs[], log: LogMessageFormat){
+  async checkForIssueID(query: Logs[], log: LogMessageFormat) {
     const relatedLog = query.find(log => log.issueID);
     if (relatedLog) {
       console.log('FOUND', relatedLog);
@@ -49,7 +50,7 @@ export abstract class IssueCreator extends IssueReporter {
         return await this.createIssueFromLog(log);
       }
       console.log('Updating Issue with Id');
-      return  await this.updateLastOccurrence(relatedLog.issueID, log.time); 
+      return await this.updateLastOccurrence(relatedLog.issueID, log.time);
     } else {
       console.log('Issue does not exist yet');
       return await this.createIssueFromLog(log);

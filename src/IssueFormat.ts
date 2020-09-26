@@ -10,8 +10,8 @@ export interface IssueFormat {
   labels?: string[]; //type will be replaced by ID[] where ID is the ID of the components later on
   assignees?: string[]; //type will be replaced by ID[] where ID is the ID of the components later on
   locations?: string[]; //type will be replaced by ID[] where ID is the ID of the components later on
-  startDate?: number; //type will be replaced by Date
-  dueDate?: number; //type will be replaced by Date
+  startDate?: Date; //type will be replaced by Date
+  dueDate?: Date; //type will be replaced by Date
   estimatedTime?: number; //type will be replaced by TimeSpan
   clientMutationID: string;
 }

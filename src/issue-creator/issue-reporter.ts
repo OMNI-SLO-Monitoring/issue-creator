@@ -1,4 +1,4 @@
-import { request, gql } from 'graphql-request';
+import { request } from 'graphql-request';
 import { IssueFormat } from '../IssueFormat';
 import { ConfigService } from '@nestjs/config';
 
@@ -21,7 +21,7 @@ export abstract class IssueReporter {
    */
   async reportIssue(issue: IssueFormat) {
     const inputData = { input: issue };
-    const queryIssue = gql`
+    const queryIssue = `
       mutation createIssue($input: CreateIssueInput!) {
         createIssue(input: $input) {
           issue {
@@ -36,7 +36,7 @@ export abstract class IssueReporter {
       console.log("CREATED ISSUE", issueID);
       return issueID;
     } catch (error) {
-      console.error("Error creating issue", error);
+      throw new Error(error);
     }
   }
 
@@ -57,7 +57,7 @@ export abstract class IssueReporter {
         "body": 'Last occurred' + lastOccurrence
       }
     };
-    const queryIssue = gql`
+    const queryIssue = `
       mutation addIssueComment($input: AddIssueCommentInput!) { 
         addIssueComment (input: $input) {
             comment {
@@ -68,10 +68,12 @@ export abstract class IssueReporter {
     `;
     try {
       const data = await request(`${this.api}`, queryIssue, inputData);
-      console.log(JSON.stringify(data, undefined, 2));      
+      console.log("CREATED ISSUE", data);
       return issueID;
     } catch (error) {
-      console.error(JSON.stringify(error, undefined, 2));
+      throw new Error(error);
     }
   }
+
+
 }
