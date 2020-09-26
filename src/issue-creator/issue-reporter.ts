@@ -50,7 +50,6 @@ export abstract class IssueReporter {
    */
   async updateLastOccurrence(issueID: string, lastOccurrence: number) {
     console.log(issueID);
-    const lastOccurrenceString: string = "Last occurrence at " + new Date(lastOccurrence)
     const inputData = {
       input: {
         "issue": issueID,

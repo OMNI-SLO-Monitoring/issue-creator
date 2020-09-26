@@ -118,7 +118,6 @@ export class LogReceiverService implements OnModuleInit {
      */
   async handleLogMessage(logMessage: LogMessageFormat) {
     console.log('processing: ', logMessage);
-    let issueID: string;
     if (!logMessage?.detectorUrl) {
       throw new HttpException('LogMessage without detector Id', 406);
     }
@@ -127,7 +126,7 @@ export class LogReceiverService implements OnModuleInit {
     } else {
       console.log('Detector is registered');
     }
-    issueID = await this.chooseIssueCreator(logMessage);
+    const issueID: string = await this.chooseIssueCreator(logMessage);
     console.log("Saving Log: " + JSON.stringify(logMessage));
     this.addLogMessageToDatabase(logMessage, issueID);
     return issueID;
@@ -252,7 +251,8 @@ export class LogReceiverService implements OnModuleInit {
       `;
     try {
       const data = await request(`${this.api}`, queryIssue);
-      return data.node;
+      const issue = {"issue" : data.node}
+      return issue;
     } catch (error) {
       throw new Error(error);
     }
