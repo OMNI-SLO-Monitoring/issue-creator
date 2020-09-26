@@ -37,6 +37,7 @@ If installed with docker the database is available at localhost:27017.
 Post Request to localhost:3500 to add logs.
 Post Request to localhost:3500/issue with a valid Issue ID to get the associated issue
 Get Request to localhost:3500 to get all logs.
+at the moment the component ID is hardcoded so you have to input a valid component ID in issue-creator.ts
 
 ```
 

@@ -115,7 +115,7 @@ describe('LogReceiverService', () => {
       message: 'Error',
       data: {
         expected: 'nice',
-        result: 'not nice'
+        actual: 'not nice'
       },
       issueID: '1',
     };
