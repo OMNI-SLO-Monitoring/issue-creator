@@ -9,7 +9,7 @@ export abstract class IssueReporter {
   api = this.configService.get<string>('BACKEND_API');
 
   constructor(
-    private readonly configService: ConfigService,
+    public readonly configService: ConfigService,
   ) { }
 
   /**
@@ -67,7 +67,7 @@ export abstract class IssueReporter {
     `;
     try {
       const data = await request(`${this.api}`, queryIssue, inputData);
-      console.log("CREATED ISSUE", data);
+      console.log("ADDED COMMENT", data);
       return issueID;
     } catch (error) {
       throw new Error(error);

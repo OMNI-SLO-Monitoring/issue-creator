@@ -21,11 +21,12 @@ export abstract class IssueCreator extends IssueReporter {
    */
   async createIssueFromLog(log: LogMessageFormat): Promise<string> {
     const date = new Date(log.time);
+    const componentID: string = this.configService.get<string>('BACKEND_COMPONENT_ID');
     const issue: IssueFormat = {
       title: `${log.type} at ${log.sourceUrl}`,
       body: JSON.stringify(log.data),
       category: 'BUG',
-      componentIDs: [`5d31cb4c619df003`], // here you need to add your own component ID which you will get from the Backend
+      componentIDs: [componentID],
       startDate: date,
       clientMutationID: 'Error-Monitoring',
     };
