@@ -112,7 +112,7 @@ export class LogReceiverService implements OnModuleInit {
      * Handles Log messages and saves the Log in the database with the Issue Id
      * checks if the Detector is registered or whether the LogMessage has a detector Id
      *
-     * @param log is the log received by the log receiver controller
+     * @param logMessage is the log received by the log receiver controller
      * @returns issueID that was received from the backend
      *
      */

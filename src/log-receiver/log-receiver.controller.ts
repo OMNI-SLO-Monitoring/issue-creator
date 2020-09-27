@@ -22,7 +22,7 @@ export class LogReceiverController {
     return this.logRcvService.handleLogMessage(logMessage);
   }
   /**
-   * the searches for the issue corresponding to the given Issue Id
+   * this function searches for the issue corresponding to the given Issue Id
    * 
    * @param body the json post body containing the issueID
    * @returns the issue associated with the ID
