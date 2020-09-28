@@ -221,6 +221,9 @@ export class LogReceiverService implements OnModuleInit {
   /**
    * Connecting to kafka instance and begin consuming
    * incoming messages are saved to the collection logs in the mongodb
+   * 
+   * If error status is 401 or 406 message is from not registered service
+   * then message is discarded, else error is thrown again and the message stays in the MQ
    *
    * Consumer is subscribed to the logs topic at the kafka instance
    */
@@ -232,7 +235,15 @@ export class LogReceiverService implements OnModuleInit {
       eachMessage: async ({ topic, partition, message }) => {
         if (message.value != null) {
           const log: LogMessageFormat = JSON.parse(message.value.toString());
-          await this.handleLogMessage(log);
+          try {
+            await this.handleLogMessage(log);
+          } catch (error) {
+            if (error.status === 401 || 406) {
+              console.error(error)
+            } else {
+              throw error
+            }
+          }
         }
       },
     });
