@@ -35,6 +35,9 @@ $ npm run start
 The issue creator sits at localhost:3500. 
 If installed with docker the database is available at localhost:27017.
 Post Request to localhost:3500 to add logs.
+Post Request to localhost:3500/issue with a valid Issue ID to get the associated issue
 Get Request to localhost:3500 to get all logs.
+A valid component ID has to be specified in the .env file under 'BACKEND_COMPONENT_ID' in order to receive an Issue ID
+
 ```
 

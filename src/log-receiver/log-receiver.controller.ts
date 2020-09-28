@@ -7,8 +7,8 @@ import { LogMessageFormat } from 'logging-format';
  */
 @Controller()
 export class LogReceiverController {
-  
-  constructor(private logRcvService: LogReceiverService) {}
+
+  constructor(private logRcvService: LogReceiverService) { }
 
   /**
    * Logs are received here and handled accordingly
@@ -20,6 +20,17 @@ export class LogReceiverController {
   @Header('Content-Type', 'application/json')
   receiveLog(@Body() logMessage: LogMessageFormat) {
     return this.logRcvService.handleLogMessage(logMessage);
+  }
+  /**
+   * this function searches for the issue corresponding to the given Issue Id
+   * 
+   * @param body the json post body containing the issueID
+   * @returns the issue associated with the ID
+   */
+  @Post('/issue')
+  @Header('Content-Type', 'application/json')
+  async getIssueFromID(@Body() body: any) {
+    return this.logRcvService.getIssueFromID(body.issueID);
   }
 
   /**
@@ -38,7 +49,7 @@ export class LogReceiverController {
    * @returns all logs from one specific service identified by id
    */
   @Get('/:id')
-  async getLogsByServiceId(@Param('id') id : string) {
+  async getLogsByServiceId(@Param('id') id: string) {
     return this.logRcvService.getLogsByServiceId(id);
   }
 
@@ -51,4 +62,5 @@ export class LogReceiverController {
   async deleteAllLogs() {
     return this.logRcvService.deleteAllLogs();
   }
+
 }

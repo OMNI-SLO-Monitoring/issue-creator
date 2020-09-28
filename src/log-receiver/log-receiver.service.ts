@@ -1,6 +1,5 @@
 import {
   Injectable,
-  HttpService,
   HttpException,
   OnModuleInit,
 } from '@nestjs/common';
@@ -16,6 +15,7 @@ import { Model } from 'mongoose';
 import { Logs } from 'src/schema/logs.schema';
 import { ConfigService } from '@nestjs/config';
 import { Kafka } from 'kafkajs';
+import { request } from 'graphql-request';
 
 /**
  * This service handles the log message passed down from the controller
@@ -32,35 +32,41 @@ export class LogReceiverService implements OnModuleInit {
   consumer: any;
   kafka: Kafka;
   kafkaUrl: string;
-  retrievedLog: LogMessageFormat;
+  api = this.configService.get<string>('BACKEND_API');
 
   constructor(
-    private http: HttpService,
     private configService: ConfigService,
     @InjectModel('logs') private logModel: Model<Logs>,
     private serviceRegistration: ServiceRegistrationService,
   ) {
-    // Create an Issue Creator for each LogType
+    this.initIssueCreators();
+    this.initKafka()
+  }
+  /**
+   * Create an Issue Creator for each LogType
+   */
+  initIssueCreators() {
     this.cpuUtilizationIssueCreator = new CpuUtilizationIssueCreatorComponent(
-      http,
       this.logModel,
-      configService,
+      this.configService,
     );
     this.timeoutIssueCreator = new TimeoutIssueCreatorComponent(
-      http,
       this.logModel,
-      configService,
+      this.configService,
     );
     this.cbOpenIssueCreator = new CbOpenIssueCreatorComponent(
-      http,
       this.logModel,
-      configService,
+      this.configService,
     );
     this.errorResponseIssueCreator = new ErrorResponseIssueCreatorComponent(
-      http,
       this.logModel,
-      configService,
+      this.configService,
     );
+  }
+  /**
+   * Initiating the Kafka queue 
+   */
+  initKafka() {
     this.kafkaUrl = this.configService.get<string>(
       'KAFKA_URL',
       'localhost:9092',
@@ -103,54 +109,58 @@ export class LogReceiverService implements OnModuleInit {
   }
 
   /**
-   * Handles Log messages by delegating them to the respective IssueCreator
+     * Handles Log messages and saves the Log in the database with the Issue Id
+     * checks if the Detector is registered or whether the LogMessage has a detector Id
+     *
+     * @param logMessage is the log received by the log receiver controller
+     * @returns issueID that was received from the backend
+     *
+     */
+  async handleLogMessage(logMessage: LogMessageFormat) {
+    console.log('processing: ', logMessage);
+    if (!logMessage?.detectorUrl) {
+      throw new HttpException('LogMessage without detector Id', 406);
+    }
+    if (!(await this.evaluatingUrl(logMessage))) {
+      throw new HttpException('LogMessage detector is not registered', 401);
+    } else {
+      console.log('Detector is registered');
+    }
+    const issueID: string = await this.chooseIssueCreator(logMessage);
+    console.log("Saving Log: " + JSON.stringify(logMessage));
+    this.addLogMessageToDatabase(logMessage, issueID);
+    return issueID;
+  }
+
+  /**
+   * Handles Log messages by delegating them to the respective IssueCreator 
+   * saves the Issue Id received from the backend
    *
    * @param logMessage is the log received by the log receiver controller
    * @returns issueID that was received from the backend
    * This calls the handleLog of the corresponding IssueCreator and passed the log message
    *
    */
-  async handleLogMessage(logMessage: LogMessageFormat) {
-    console.log('processing: ', logMessage);
-    this.retrievedLog = logMessage;
-
-    if (!logMessage?.detectorUrl) {
-      throw new HttpException('LogMessage without detector Id', 406);
-    }
-
-    if (!(await this.evaluatingUrl(this.retrievedLog))) {
-      throw new HttpException('LogMessage detector is not registered', 401);
-    } else {
-      console.log('Detector is registered');
-    }
-
-    let issueID;
-    switch (this.retrievedLog.type) {
+  async chooseIssueCreator(logMessage: LogMessageFormat) {
+    let issueID: string;
+    switch (logMessage.type) {
       case LogType.CPU:
-        issueID = await this.cpuUtilizationIssueCreator.handleLog(
-          this.retrievedLog,
-        );
+        issueID = await this.cpuUtilizationIssueCreator.handleLog(logMessage);
         break;
       case LogType.CB_OPEN:
-        issueID = await this.cbOpenIssueCreator.handleLog(this.retrievedLog);
+        issueID = await this.cbOpenIssueCreator.handleLog(logMessage);
         break;
       case LogType.ERROR:
-        issueID = await this.errorResponseIssueCreator.handleLog(
-          this.retrievedLog,
-        );
+        issueID = await this.errorResponseIssueCreator.handleLog(logMessage);
         break;
       case LogType.TIMEOUT:
-        issueID = await this.timeoutIssueCreator.handleLog(this.retrievedLog);
+        issueID = await this.timeoutIssueCreator.handleLog(logMessage);
         break;
       default:
-        throw 'Not Implemented LogType';
+        throw new Error('Not Implemented LogType');
     }
-    console.log("Saving Log: " + JSON.stringify(this.retrievedLog));
-
-    this.addLogMessageToDatabase(this.retrievedLog, issueID);
     return issueID;
   }
-
   /**
    * Writes the received log message and the issue ID into the database
    *
@@ -225,5 +235,26 @@ export class LogReceiverService implements OnModuleInit {
 
   async stopConsuming() {
     await this.consumer.disconnect();
+  }
+  /**
+   * sends an issue id to the Backend API to request the corresponding issue 
+   * 
+   * @param issueID of an issue
+   * @returns the issue corresponding to the issue id
+   */
+  async getIssueFromID(issueID: string) {
+    const queryIssue = `
+      query getIssue{
+        node (id : "${issueID}"){...on Issue{id, title, body, category, isOpen}
+        }
+      }
+      `;
+    try {
+      const data = await request(`${this.api}`, queryIssue);
+      const issue = {"issue" : data.node}
+      return issue;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

@@ -51,7 +51,7 @@ describe('LogReceiverService', () => {
         failedResponses: 31,
         openTime: 10,
       },
-      // issueID: '1',
+      issueID: '1',
     };
     jest
       .spyOn(service.cbOpenIssueCreator, 'handleLog')
@@ -73,7 +73,7 @@ describe('LogReceiverService', () => {
       data: {
         timeoutDuration : 1000
       },
-      // issueID: '1',
+      issueID: '1',
     };
     jest
       .spyOn(service.cbOpenIssueCreator, 'handleLog')
@@ -95,7 +95,7 @@ describe('LogReceiverService', () => {
       data: {
         cpuUtilization: 75
       },
-      // issueID: '1',
+      issueID: '1',
     };
     jest
       .spyOn(service.cbOpenIssueCreator, 'handleLog')
@@ -117,7 +117,7 @@ describe('LogReceiverService', () => {
         expected: 'nice',
         actual: 'not nice'
       },
-      // issueID: '1',
+      issueID: '1',
     };
     jest
       .spyOn(service.cbOpenIssueCreator, 'handleLog')

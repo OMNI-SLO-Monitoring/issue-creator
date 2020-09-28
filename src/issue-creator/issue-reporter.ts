@@ -1,21 +1,19 @@
-import { HttpService } from '@nestjs/common';
-import { request, gql } from 'graphql-request';
+import { request } from 'graphql-request';
 import { IssueFormat } from '../IssueFormat';
 import { ConfigService } from '@nestjs/config';
 
 /**
- * Provides the basic functionality every "detailed" IssueCreator should have
+ * Provides the basic functionality to report Issues to the API https://github.com/ccims/ccims-backend-gql should have and to add comments to them
  */
 export abstract class IssueReporter {
   api = this.configService.get<string>('BACKEND_API');
 
   constructor(
-    private readonly http: HttpService,
-    private readonly configService: ConfigService,
+    public readonly configService: ConfigService,
   ) { }
 
   /**
-   * sends Issues to the current MockApi (https://github.com/ccims/ccims-backend/tree/apiMockup)
+   * sends Issues to the current Backend (https://github.com/ccims/ccims-backend-gql)
    * and receives the Issue ID from it if the request was successful.
    *
    * @param issue issue to be send
@@ -23,7 +21,7 @@ export abstract class IssueReporter {
    */
   async reportIssue(issue: IssueFormat) {
     const inputData = { input: issue };
-    const queryIssue = gql`
+    const queryIssue = `
       mutation createIssue($input: CreateIssueInput!) {
         createIssue(input: $input) {
           issue {
@@ -38,9 +36,10 @@ export abstract class IssueReporter {
       console.log("CREATED ISSUE", issueID);
       return issueID;
     } catch (error) {
-      console.error("Error creating issue", error);
+      throw new Error(error);
     }
   }
+
 
   /**
    * Updates a last occurrence of an Issue by adding a comment to the existing Issue.
@@ -50,14 +49,14 @@ export abstract class IssueReporter {
    * @returns the issueID received when the the request was accepted by the server
    */
   async updateLastOccurrence(issueID: string, lastOccurrence: number) {
-    const lastOccurrenceString: string = "Last occurrence at" + new Date(lastOccurrence)
+    console.log(issueID);
     const inputData = {
       input: {
-        "issueID": issueID,
+        "issue": issueID,
         "body": 'Last occurred' + lastOccurrence
       }
     };
-    const queryIssue = gql`
+    const queryIssue = `
       mutation addIssueComment($input: AddIssueCommentInput!) { 
         addIssueComment (input: $input) {
             comment {
@@ -68,10 +67,12 @@ export abstract class IssueReporter {
     `;
     try {
       const data = await request(`${this.api}`, queryIssue, inputData);
-      console.log(JSON.stringify(data, undefined, 2));      
+      console.log("ADDED COMMENT", data);
       return issueID;
     } catch (error) {
-      console.error(JSON.stringify(error, undefined, 2));
+      throw new Error(error);
     }
   }
+
+
 }
