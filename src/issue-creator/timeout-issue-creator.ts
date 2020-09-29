@@ -19,7 +19,7 @@ export class TimeoutIssueCreatorComponent extends IssueCreator {
   }
 
   /**
-   * handles timeout logs by creating or updating an Issue and sending it to the API: https://github.com/ccims/ccims-backend/tree/apiMockup
+   * handles timeout logs by creating or updating an Issue and sending it to the API: https://github.com/ccims/ccims-backend-gql
    *
    * @param log received log in the LogMessageFormat
    * @returns the issue ID received from the backend

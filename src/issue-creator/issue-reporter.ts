@@ -49,11 +49,11 @@ export abstract class IssueReporter {
    * @returns the issueID received when the the request was accepted by the server
    */
   async updateLastOccurrence(issueID: string, lastOccurrence: number) {
-    console.log(issueID);
+    const date = new Date(lastOccurrence);
     const inputData = {
       input: {
         "issue": issueID,
-        "body": 'Last occurred' + lastOccurrence
+        "body": 'Last occurred ' + date
       }
     };
     const queryIssue = `

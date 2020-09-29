@@ -19,7 +19,7 @@ export class CpuUtilizationIssueCreatorComponent extends IssueCreator {
   }
 
   /**
-   * handles Cpu logs by creating an Issue and sending it to the API: https://github.com/ccims/ccims-backend/tree/apiMockup
+   * handles Cpu logs by creating an Issue and sending it to the API: https://github.com/ccims/ccims-backend-gql
    * 
    * @param log received log in the LogMessageFormat
    * @returns the issue ID received from the backend

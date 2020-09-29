@@ -27,10 +27,9 @@ export class LogReceiverController {
    * @param body the json post body containing the issueID
    * @returns the issue associated with the ID
    */
-  @Post('/issue')
-  @Header('Content-Type', 'application/json')
-  async getIssueFromID(@Body() body: any) {
-    return this.logRcvService.getIssueFromID(body.issueID);
+  @Get('/issue/:id')
+  async getIssueFromID(@Param('id') id: string) {
+    return this.logRcvService.getIssueFromID(id);
   }
 
   /**
