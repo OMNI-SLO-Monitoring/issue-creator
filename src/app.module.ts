@@ -11,7 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     HttpModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/logDatabase'),
+    MongooseModule.forRoot('mongodb://db:27017/logDatabase'),
     MongooseModule.forFeature([
       { name: 'logs', schema: LogsSchema },
       { name: 'service', schema: ServiceSchema }
