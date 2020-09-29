@@ -1,4 +1,3 @@
-import { HttpService } from '@nestjs/common';
 import { LogMessageFormat, LogType } from 'logging-format';
 import { IssueCreator } from './issue-creator';
 import { ConfigService } from '@nestjs/config';
@@ -14,10 +13,9 @@ export class CpuUtilizationIssueCreatorComponent extends IssueCreator {
   correspondingIssueTimeInterval: number = 1000 * 60 * 60; // 1 h
 
   constructor(
-    http: HttpService,
     private logModel: Model<Logs>,
     configService: ConfigService) {
-    super(http, configService);
+    super(configService);
   }
 
   /**
@@ -27,29 +25,13 @@ export class CpuUtilizationIssueCreatorComponent extends IssueCreator {
    * @returns the issue ID received from the backend
    */
   async handleLog(log: LogMessageFormat)  {
-    if (log.type != LogType.CPU) throw 'Wrong LogType';   
-    console.log("LogType == CPU");
-    
+    if (log.type != LogType.CPU) throw new Error('Wrong LogType');   
+
     const query = await this.logModel.find({
       detectorUrl: log.detectorUrl, 
       time: { $gte: log.time - this.correspondingIssueTimeInterval } 
     });
 
-    const relatedLog = query.find((log) => log.issueID)
-
-    if (relatedLog) {
-
-      if (!relatedLog.issueID) {
-        // Issue already exists but latest log doesn't have a IssueId, this should not happen but if it does we create a new issue anyways
-        console.log("WARNING: Log does not have a IssueId")
-        return await this.createIssueFromLog(log);
-      }
-      console.log("Updating Issue with Id ")
-      return await this.updateLastOccurrence(relatedLog.issueID, log.time) // TODO: ? Should we add more information to the commend besides time?
-
-    } else {
-      console.log("Issue does not exist yet");
-      return await this.createIssueFromLog(log);
-    }
+    return this.checkForIssueID(query, log);
   }
 }

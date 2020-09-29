@@ -1,4 +1,3 @@
-import { HttpService } from '@nestjs/common';
 import { LogMessageFormat, LogType } from 'logging-format';
 import { IssueCreator } from './issue-creator';
 import { ConfigService } from '@nestjs/config';
@@ -13,45 +12,25 @@ export class ErrorResponseIssueCreatorComponent extends IssueCreator {
   correspondingIssueTimeInterval: number = 1000 * 60 * 60; // 1 h
 
   constructor(
-    http: HttpService,
     private logModel: Model<Logs>,
     configService: ConfigService,
   ) {
-    super(http, configService);
+    super(configService);
   }
 
   /**
-   * handles error response logs by creating or updating an Issue and sending it to the API: https://github.com/ccims/ccims-backend/tree/apiMockup
+   * handles error response logs by creating or updating an Issue and sending it to the API: https://github.com/ccims/ccims-backend-gql
    *
    * @param log received log in the LogMessageFormat
    * @returns the issue ID received from the backend
    */
   async handleLog(log: LogMessageFormat) {
-    if (log.type != LogType.ERROR) throw 'Wrong LogType';
+    if (log.type != LogType.ERROR) throw new Error('Wrong LogType');
 
-    // TODO: Should we include logs with same correlationId for a better stacktrace?
-    // TODO: Should we use expected/result as a criterial for when logs belong to an existing issue?
     const query = await this.logModel.find({
       detectorUrl: log.detectorUrl,
       time: { $gte: log.time - this.correspondingIssueTimeInterval },
     });
-
-    const relatedLog = query.find(log => log.issueID);
-
-    if (relatedLog) {
-      console.log('FOUND', relatedLog);
-
-      if (!relatedLog.issueID) {
-        // Issue already exists but latest log doesn't have a IssueId, this should not happen but if it does we create a new issue anyways
-        console.log('WARNING: Log does not have a IssueId');
-        return await this.createIssueFromLog(log);
-      }
-      console.log('Updating Issue with Id');
-      return  await this.updateLastOccurrence(relatedLog.issueID, log.time); // TODO: ? Should we add more information to the comment besides time?
-      
-    } else {
-      console.log('Issue does not exist yet');
-      return await this.createIssueFromLog(log);
-    }
+    return this.checkForIssueID(query, log);
   }
 }
