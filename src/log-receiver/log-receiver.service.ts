@@ -245,13 +245,24 @@ export class LogReceiverService implements OnModuleInit {
   async getIssueFromID(issueID: string) {
     const queryIssue = `
       query getIssue{
-        node (id : "${issueID}"){...on Issue{id, title, body, category, isOpen}
+        node (id : "${issueID}"){...on Issue{
+          id, 
+          title, 
+          body, 
+          category, 
+          issueComments{
+            nodes{
+              body
+            }
+          }
+          isOpen
+          }
         }
       }
       `;
     try {
       const data = await request(`${this.api}`, queryIssue);
-      const issue = {"issue" : data.node}
+      const issue = { "issue": data.node }
       return issue;
     } catch (error) {
       throw new Error(error);

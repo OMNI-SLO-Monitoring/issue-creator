@@ -19,7 +19,7 @@ export class CbOpenIssueCreatorComponent extends IssueCreator {
   }
 
   /**
-   * handles cb open logs by creating or updating an Issue and sending it to the API: https://github.com/ccims/ccims-backend/tree/apiMockup
+   * handles cb open logs by creating or updating an Issue and sending it to the API: https://github.com/ccims/ccims-backend-gql
    * 
    * @param log received log 
    * @returns the issue ID received from the backend
