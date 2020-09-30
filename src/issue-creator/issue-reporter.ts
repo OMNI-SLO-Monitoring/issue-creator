@@ -36,7 +36,7 @@ export abstract class IssueReporter {
       console.log("CREATED ISSUE", issueID);
       return issueID;
     } catch (error) {
-      throw new Error(error);
+      console.log(error);      
     }
   }
 
